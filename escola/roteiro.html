@@ -35,7 +35,7 @@
   ul.check { margin: 0; padding: 0; list-style: none }
   ul.check li { position: relative; padding-left: 36px; margin-bottom: 9px }
   ul.check li::before { content: ""; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; background: #c9f5e3; border: 3px solid var(--ink); border-radius: 7px }
-  .step { display: grid; grid-template-columns: 92px 1fr; gap: 6px 16px; padding: 16px 0; border-top: 3px dashed var(--line); break-inside: avoid; page-break-inside: avoid }
+  .step { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 16px; padding: 16px 0; border-top: 3px dashed var(--line); break-inside: avoid; page-break-inside: avoid }
   .step:first-of-type { border-top: none; padding-top: 4px }
   .time { grid-row: span 4; align-self: start; padding: 8px 0 6px; background: var(--c, var(--blue)); border: 3px solid var(--ink); border-radius: 16px; box-shadow: 0 3px 0 var(--ink); color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-align: center; font-weight: 700; font-size: 21px; line-height: 1.05 }
   .time small { display: block; font-size: 13px; -webkit-text-stroke: 0; color: var(--ink); font-weight: 600 }
@@ -56,9 +56,9 @@
   dd { margin: 0 }
 
   /* Arrow cards to cut out, as big as possible on an A4 sheet */
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4mm }
   .cards div { aspect-ratio: 1; border: 1mm dashed #9aa3ad; border-radius: 6mm; display: grid; place-items: center; align-content: center; gap: 2mm; font-weight: 700; font-size: 15px }
-  .cards b { font: 700 120px/1 system-ui, sans-serif; color: var(--ink) }
+  .cards b { font: 700 min(120px, 20vw)/1 system-ui, sans-serif; color: var(--ink) }
   .cards svg { width: 60%; height: 60% }
   .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start }
   .answers svg { width: 100% }
@@ -67,6 +67,12 @@
   .words td.hit { background: var(--yellow) }
 
   @page { size: A4; margin: 12mm }
+  @media (max-width: 480px) {
+    th, td { padding: 8px 4px }
+    .step { grid-template-columns: 70px minmax(0, 1fr); gap: 6px 10px }
+    .time { font-size: 17px }
+    .idea { padding: 34px 12px 8px }
+  }
   @media print {
     body { padding: 0; background: #fff; font-size: 13.5px; -webkit-print-color-adjust: exact; print-color-adjust: exact }
     .bar { display: none }

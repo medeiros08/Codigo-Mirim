@@ -45,11 +45,11 @@
   ul.check { margin: 0; padding: 0; list-style: none }
   ul.check li { position: relative; padding-left: 36px; margin-bottom: 9px }
   ul.check li::before { content: ""; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; background: #c9f5e3; border: 3px solid var(--ink); border-radius: 7px }
-  .step { display: grid; grid-template-columns: 92px 1fr; gap: 6px 16px; padding: 14px 0; border-top: 3px dashed var(--line); break-inside: avoid; page-break-inside: avoid }
+  .step { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 16px; padding: 14px 0; border-top: 3px dashed var(--line); break-inside: avoid; page-break-inside: avoid }
   .step:first-of-type { border-top: none }
   .time { grid-row: span 5; align-self: start; padding: 8px 0 6px; background: var(--c, var(--blue)); border: 3px solid var(--ink); border-radius: 16px; box-shadow: 0 3px 0 var(--ink); color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-align: center; font-weight: 700; font-size: 20px; line-height: 1.05 }
   .time small { display: block; font-size: 13px; -webkit-text-stroke: 0; color: var(--ink); font-weight: 600 }
-  .step p { margin: 0 }
+  .step p { margin: 0; overflow-wrap: break-word }
   .step b.label { font-weight: 700; margin-right: 4px }
   .idea { position: relative; padding: 8px 12px 8px 74px; background: #fff1a8; border: 2px dashed var(--ink); border-radius: 14px; font-weight: 500 }
   .idea::before { content: "Ideia"; position: absolute; left: 10px; top: 8px; padding: 0 8px; background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; font-size: 13px; font-weight: 700 }
@@ -61,6 +61,12 @@
   .new-page { break-before: page; page-break-before: always }
 
   @page { size: A4; margin: 12mm }
+  @media (max-width: 480px) {
+    .card { padding: 18px 14px }
+    .step { grid-template-columns: 70px minmax(0, 1fr); gap: 6px 10px }
+    .time { font-size: 17px }
+    .idea { padding: 34px 12px 8px }
+  }
   @media print {
     body { padding: 0; background: #fff; font-size: 13px; -webkit-print-color-adjust: exact; print-color-adjust: exact }
     .bar { display: none }

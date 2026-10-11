@@ -2,6 +2,8 @@
   <a href="https://medeiros08.github.io/Codigo-Mirim/"><img src="docs/previa.png" alt="Página inicial do site, com os jogos e os materiais" width="820"></a>
 </p>
 
+<p align="center"><b>Código Mirim</b></p>
+
 <h1 align="center">Jogos e Materiais · Engenharia de Software na escola</h1>
 
 <p align="center">

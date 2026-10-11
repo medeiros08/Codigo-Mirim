@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jogos e Materiais · Engenharia de Software na escola</title>
+<title>Código Mirim · Jogos e Materiais de Engenharia de Software na escola</title>
 <meta name="description" content="Os jogos para a turma, a Oficina de Prompts para professores e os materiais da aula, num lugar só, com QR codes, links curtos e uso sem internet.">
-<meta property="og:title" content="Jogos e Materiais">
+<meta property="og:title" content="Código Mirim · Jogos e Materiais">
 <meta property="og:description" content="Os jogos para a turma, a Oficina de Prompts para professores e os materiais da aula, num lugar só.">
 <meta property="og:image" content="https://medeiros08.github.io/Codigo-Mirim/icone-512.png">
 <meta name="theme-color" content="#5fbcff">
@@ -72,6 +72,9 @@
 
   /* Top of the page: title, Bit the robot talking, and the shortcuts */
   .hero { text-align: center }
+  .brand { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 10px; padding: 3px 16px 3px 8px; background: #fff; border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 4px 0 var(--ink); font-size: clamp(16px, 4.4vw, 21px); font-weight: 700; transform: rotate(-2deg) }
+  .brand svg { width: 1.6em; height: 1.6em; flex: none }
+  .brand .b1 { color: #2f7fd6 } .brand .b2 { color: #e8457a }
   .logo { margin: 6px 0 0; font-size: clamp(44px, 11.5vw, 82px); font-weight: 700; line-height: 1; color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 0 6px 0 var(--ink) }
   .logo span { display: inline-block; animation: hop 3.4s ease-in-out infinite }
   .logo .w1 { color: var(--yellow) }
@@ -296,6 +299,7 @@
 
 <div class="page">
   <header class="hero">
+    <p class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="7" width="34" height="26" rx="8" fill="#4fd6a6" stroke="#2f2a4a" stroke-width="3"/><path d="M15 14 L10 20 L15 26 M25 14 L30 20 L25 26" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="b1">Código</span> <span class="b2">Mirim</span></p>
     <h1 class="logo"><span class="w1">Jogos</span> <span class="w2">e</span> <span class="w3">Materiais</span></h1>
     <p class="tagline">Engenharia de Software na escola</p>
     <div class="hello">
@@ -422,7 +426,7 @@
 
 <script type="application/json" id="links">
 {
-  "title": "Jogos e materiais de Engenharia de Software (UNIPAMPA)",
+  "title": "Código Mirim: jogos e materiais de Engenharia de Software (UNIPAMPA)",
   "site": "https://medeiros08.github.io/Codigo-Mirim/",
   "groups": {
     "jogos": { "title": "Jogos", "poster": "Escaneie e jogue!" },
