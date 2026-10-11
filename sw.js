@@ -61,7 +61,7 @@ const FILES = [
   "roteiro/index.html",
   "slides/index.html"
 ]
-const CACHE = "jogo-es"
+const CACHE = "codigo-mirim"
 const SCOPE = new URL(self.registration.scope)
 const FONTS = ["fonts.googleapis.com", "fonts.gstatic.com"]
 
