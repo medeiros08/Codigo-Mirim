@@ -7,14 +7,12 @@
 <meta name="description" content="Uma formação em encontros para professores da Educação Infantil e do Ensino Fundamental criarem atividades e jogos para as suas turmas com o Gemini.">
 <meta name="theme-color" content="#5fbcff">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='20' width='72' height='60' rx='16' fill='%234da3ff' stroke='%231d2a44' stroke-width='6'/><circle cx='36' cy='48' r='9' fill='%23fff'/><circle cx='64' cy='48' r='9' fill='%23fff'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>@font-face { font-family: "Fredoka"; src: url("fontes/fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: swap }</style>
 <style>
   :root {
     --sky1: #5fbcff; --sky2: #cdeeff; --hill: #8ddf6a; --hill2: #6cc653;
     --ink: #2f2a4a; --soft: #5d5880;
-    --blue: #4da3ff; --pink: #ff5f8f; --mint: #4fd6a6; --orange: #ff8a3d; --purple: #8c73ff; --yellow: #ffd23f;
+    --blue: #4da3ff; --pink: #ff5f8f; --mint: #4fd6a6; --orange: #ff8a3d; --purple: #a08bff; --yellow: #ffd23f;
     --font: "Fredoka", "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent }
@@ -49,6 +47,10 @@
 
   /* Top: title, Bit the robot with his graduation cap, and the main button */
   .hero { text-align: center }
+  .brand { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 10px; padding: 3px 16px 3px 8px; background: #fff; border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 4px 0 var(--ink); font-size: clamp(16px, 4.4vw, 21px); font-weight: 700; text-decoration: none; transform: rotate(-2deg); transition: transform .15s }
+  .brand:hover { transform: rotate(0) translateY(-2px) }
+  .brand svg { width: 1.6em; height: 1.6em; flex: none }
+  .brand .b1 { color: #2470c4 } .brand .b2 { color: #c92a62 }
   h1 { margin: 6px 0 0; font-size: clamp(44px, 11vw, 80px); font-weight: 700; line-height: 1.02; color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 0 6px 0 var(--ink) }
   h1 span { display: inline-block; animation: hop 3.4s ease-in-out infinite }
   h1 .w1 { color: var(--yellow) } h1 .w2 { animation-delay: .2s } h1 .w3 { color: var(--pink); animation-delay: .4s }
@@ -120,6 +122,14 @@
   .tool h3 { margin: 0 0 4px; font-size: 22px; font-weight: 700 }
   .tool p { margin: 0; font-weight: 500 }
   .tools { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)) }
+  .solo { display: flex; align-items: center; gap: 20px; padding: 20px 24px; background: #fff; border: 4px solid var(--ink); border-radius: 28px; box-shadow: 0 7px 0 rgba(47, 42, 74, .25); text-decoration: none; transition: transform .25s cubic-bezier(.3, 1.5, .6, 1) }
+  .solo:hover { transform: translateY(-4px) rotate(-.5deg) }
+  .solo svg { width: 110px; flex: none; overflow: visible }
+  .solo h3 { margin: 4px 0; font-size: 26px; font-weight: 700 }
+  .solo p { margin: 0; font-weight: 500 }
+  .solo .btn { flex: none }
+  .solo-tag { display: inline-block; padding: 2px 12px; background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; font-size: 15px; font-weight: 700 }
+  @media (max-width: 700px) { .solo { flex-direction: column; text-align: center } .solo svg { width: 90px } }
   .tool.kit { align-items: flex-start }
   .tool.kit svg { width: 54px; height: 54px }
   .mini.n { justify-content: center; min-width: 46px; padding: 4px 0 }
@@ -165,6 +175,7 @@
 
 <div class="page">
 <header class="hero">
+  <a class="brand" href="../" aria-label="Código Mirim: todos os jogos e materiais"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="7" width="34" height="26" rx="8" fill="#4fd6a6" stroke="#2f2a4a" stroke-width="3"/><path d="M15 14 L10 20 L15 26 M25 14 L30 20 L25 26" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="b1">Código</span> <span class="b2">Mirim</span></a>
   <h1><span class="w1">Oficina</span> <span class="w2">de</span> <span class="w3">Prompts</span></h1>
   <p class="tagline">para professores</p>
   <div class="hello">
@@ -265,7 +276,7 @@
         <li>Compartilhar o jogo com a turma por link ou pelo Google Classroom.</li>
       </ul>
       <div class="out"><b>Você sai com:</b> um jogo funcionando, sobre um conteúdo seu.</div>
-      <div class="go"><a class="mini" href="encontro-3.html" style="--c: var(--light)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2" fill="#fff" stroke="#2f2a4a" stroke-width="2.2"/><path d="M6 8 H15 M6 11.5 H12" stroke="#4da3ff" stroke-width="2.2" stroke-linecap="round"/><path d="M8 21 L12 16 L16 21" fill="none" stroke="#2f2a4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Slides do encontro</a><a class="mini" href="galeria.html">Galeria de jogos</a></div>
+      <div class="go"><a class="mini" href="encontro-3.html" style="--c: var(--light)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2" fill="#fff" stroke="#2f2a4a" stroke-width="2.2"/><path d="M6 8 H15 M6 11.5 H12" stroke="#4da3ff" stroke-width="2.2" stroke-linecap="round"/><path d="M8 21 L12 16 L16 21" fill="none" stroke="#2f2a4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Slides do encontro</a><a class="mini" href="galeria.html">Galeria de jogos</a><a class="mini" href="passo-a-passo.html#canvas">Passo a passo do Canvas</a></div>
     </div>
     <div class="meeting" style="--c: var(--purple); --light: #e2dbff">
       <div class="n">4</div>
@@ -276,9 +287,23 @@
         <li>Apresentação dos projetos e certificado.</li>
       </ul>
       <div class="out"><b>Você sai com:</b> um Gem seu e o certificado da oficina.</div>
-      <div class="go"><a class="mini" href="encontro-4.html" style="--c: var(--light)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2" fill="#fff" stroke="#2f2a4a" stroke-width="2.2"/><path d="M6 8 H15 M6 11.5 H12" stroke="#4da3ff" stroke-width="2.2" stroke-linecap="round"/><path d="M8 21 L12 16 L16 21" fill="none" stroke="#2f2a4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Slides do encontro</a><a class="mini" href="gems.html">Gems prontos</a></div>
+      <div class="go"><a class="mini" href="encontro-4.html" style="--c: var(--light)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2" fill="#fff" stroke="#2f2a4a" stroke-width="2.2"/><path d="M6 8 H15 M6 11.5 H12" stroke="#4da3ff" stroke-width="2.2" stroke-linecap="round"/><path d="M8 21 L12 16 L16 21" fill="none" stroke="#2f2a4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Slides do encontro</a><a class="mini" href="gems.html">Gems prontos</a><a class="mini" href="passo-a-passo.html#gem">Passo a passo do Gem</a></div>
     </div>
   </div>
+</section>
+
+<section>
+  <a class="solo" href="curso.html">
+    <svg viewBox="0 0 96 80" aria-hidden="true">
+      <rect x="6" y="8" width="84" height="54" rx="8" fill="#fff" stroke="#2f2a4a" stroke-width="4"/>
+      <rect x="14" y="16" width="68" height="38" rx="4" fill="#cfe6ff"/>
+      <g class="g wiggle"><circle cx="34" cy="35" r="9" fill="#4fd6a6" stroke="#2f2a4a" stroke-width="3"/><path d="M30 35 l3 3 l6 -7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <path d="M50 30 H72 M50 40 H66" stroke="#2f2a4a" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 62 L26 72 H70 L66 62" fill="#ffd23f" stroke="#2f2a4a" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+    <div><span class="solo-tag">Não pode ir aos encontros?</span><h3>Faça o curso online, no seu ritmo</h3><p>Os 4 encontros em módulos curtos, com prática na própria página, teste final e comprovante de conclusão.</p></div>
+    <span class="btn loud" style="--c: var(--blue)">Começar</span>
+  </a>
 </section>
 
 <section>
@@ -318,6 +343,10 @@
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="10" width="52" height="44" rx="6" fill="#ffd23f" stroke="#2f2a4a" stroke-width="4"/><rect x="13" y="17" width="38" height="30" rx="3" fill="#fff" stroke="#2f2a4a" stroke-width="3"/><g class="g wiggle"><rect x="18" y="25" width="28" height="15" rx="7.5" fill="#8c73ff" stroke="#2f2a4a" stroke-width="2.5"/><path d="M25 29 V36 M21.5 32.5 H28.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="38" cy="30" r="2.3" fill="#ffd23f"/><circle cx="41" cy="35" r="2.3" fill="#ff5f8f"/></g></svg>
       <div><h3>Galeria de jogos</h3><p>Os jogos que os professores criam na oficina, para jogar e para ter ideias.</p></div>
     </a>
+    <a class="tool" href="passo-a-passo.html">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="10" width="56" height="38" rx="6" fill="#fff" stroke="#2f2a4a" stroke-width="4"/><path d="M27 20 L41 29 L27 38 Z" fill="#ff5f8f" stroke="#2f2a4a" stroke-width="3" stroke-linejoin="round"/><g class="g wiggle"><path d="M44 40 V30 a3 3 0 0 1 6 0 V42 l4 -2 a3 3 0 0 1 3 5 l-7 9 H44 Z" fill="#ffd9b8" stroke="#2f2a4a" stroke-width="2.5" stroke-linejoin="round"/></g></svg>
+      <div><h3>Passo a passo animado</h3><p>Três vídeos curtos: abrir o Canvas, compartilhar o jogo com a turma e criar um Gem.</p></div>
+    </a>
   </div>
 </section>
 
@@ -344,6 +373,14 @@
     <div class="tool kit">
       <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 40 L16 60 L24 56 L28 62 L32 44 M42 40 L48 60 L40 56 L36 62 L32 44" fill="#ff5f8f" stroke="#2f2a4a" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="26" r="18" fill="#ffd23f" stroke="#2f2a4a" stroke-width="4"/><path class="gem-shine" d="M32 15 L35 23 L43 24 L37 29 L39 37 L32 33 L25 37 L27 29 L21 24 L29 23 Z" fill="#fff" stroke="#2f2a4a" stroke-width="2" stroke-linejoin="round"/></svg>
       <div><h3>Certificado da oficina</h3><p>Escreva os nomes e imprima um por professor, ou baixe em branco para preencher à mão.</p><div class="go"><a class="mini" href="certificado.html">Preencher</a><a class="mini" href="certificado.pdf" style="--c: var(--yellow)">PDF</a></div></div>
+    </div>
+    <div class="tool kit">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="4" width="44" height="56" rx="5" fill="#cfe6ff" stroke="#2f2a4a" stroke-width="4"/><path d="M10 40 Q22 32 32 40 T54 40 V55 a5 5 0 0 1 -5 5 H15 a5 5 0 0 1 -5 -5 Z" fill="#8ddf6a"/><rect x="10" y="4" width="44" height="56" rx="5" fill="none" stroke="#2f2a4a" stroke-width="4"/><g class="g wiggle"><rect x="18" y="12" width="28" height="12" rx="6" fill="#ffd23f" stroke="#2f2a4a" stroke-width="3"/></g><rect x="22" y="30" width="20" height="16" rx="2" fill="#fff" stroke="#2f2a4a" stroke-width="3"/></svg>
+      <div><h3>Cartaz-convite</h3><p>Para pendurar na escola. Escreva data, horário, local e contato na tela ou à mão.</p><div class="go"><a class="mini" href="convite.html">Ver na tela</a><a class="mini" href="convite.pdf" style="--c: var(--yellow)">PDF</a></div></div>
+    </div>
+    <div class="tool kit">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="4" width="40" height="56" rx="5" fill="#fff" stroke="#2f2a4a" stroke-width="4"/><path d="M20 16 H44 M20 25 H44 M20 34 H36" stroke="#8cc4ff" stroke-width="4" stroke-linecap="round"/><g class="g wiggle"><path d="M36 50 l4 4 l9 -10" stroke="#4fd6a6" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+      <div><h3>Proposta para a escola</h3><p>Uma página para a direção ou a Secretaria: o que é, formato, o que a escola precisa e privacidade.</p><div class="go"><a class="mini" href="proposta.html">Ver na tela</a><a class="mini" href="proposta.pdf" style="--c: var(--yellow)">PDF</a></div></div>
     </div>
   </div>
 </section>

@@ -766,6 +766,7 @@
     document.querySelectorAll('.g-stars').forEach(function(s){
       var n = readStars(s.dataset.id);
       s.innerHTML = '<b>' + '★★★'.slice(0, n) + '</b><i>' + '★★★'.slice(0, 3 - n) + '</i>';
+      s.setAttribute('role', 'img');
       s.setAttribute('aria-label', n + ' de 3 estrelas');
     });
   }

@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7cc8ff">
 <title>Caça aos Bugs!</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +24,7 @@
     background:linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 70%, var(--sky2) 100%);
     -webkit-user-select:none; user-select:none;
   }
+  html{touch-action:manipulation;}
   button{font:inherit; border:0; cursor:pointer; touch-action:manipulation; color:inherit;}
   button:focus-visible{outline:4px solid var(--ink); outline-offset:3px;}
   [hidden]{display:none!important;}
@@ -54,10 +55,10 @@
   .hero{width:150px; height:150px; animation:wobble 2s ease-in-out infinite;}
   @keyframes wobble{50%{transform:rotate(8deg) translateY(-6px);}}
   .story{background:#fff; border-radius:22px; padding:14px 18px; font-size:1.08rem; line-height:1.4; font-weight:500; box-shadow:0 6px 0 rgba(47,42,74,.12); max-width:22em;}
-  .story b{color:var(--pink);}
+  .story b{color:#c92a62;}
   .btn{
     background:var(--orange); color:#fff; font-weight:700; font-size:1.6rem; padding:14px 38px; border-radius:999px;
-    box-shadow:0 7px 0 var(--orange-d); text-shadow:0 2px 0 rgba(0,0,0,.15);
+    box-shadow:0 7px 0 var(--orange-d); -webkit-text-stroke:6px var(--ink); paint-order:stroke fill;
   }
   .btn:active{transform:translateY(5px); box-shadow:0 2px 0 var(--orange-d);}
   .how{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; font-weight:600; font-size:.95rem; color:var(--ink);}

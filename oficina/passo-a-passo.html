@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Passo a passo no Gemini · Oficina de Prompts</title>
+<meta name="description" content="Três vídeos curtos e animados: abrir o Canvas e pedir um jogo, compartilhar o jogo com a turma e criar um Gem no Gemini.">
+<meta name="theme-color" content="#5fbcff">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='20' width='72' height='60' rx='16' fill='%234da3ff' stroke='%231d2a44' stroke-width='6'/><circle cx='36' cy='48' r='9' fill='%23fff'/><circle cx='64' cy='48' r='9' fill='%23fff'/></svg>">
+<style>@font-face { font-family: "Fredoka"; src: url("fontes/fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: swap }</style>
+<style>
+  :root {
+    --sky1: #5fbcff; --sky2: #cdeeff; --hill: #8ddf6a; --hill2: #6cc653;
+    --ink: #2f2a4a; --soft: #5d5880; --line: #cfcbe6;
+    --blue: #4da3ff; --pink: #ff5f8f; --mint: #4fd6a6; --orange: #ff8a3d; --purple: #8c73ff; --yellow: #ffd23f;
+    --font: "Fredoka", "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent }
+  [hidden] { display: none !important }
+  html { background: var(--sky2) }
+  body { margin: 0; min-height: 100vh; overflow-x: hidden; color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.45 }
+  a { color: var(--ink); font-weight: 600 }
+  button { font: inherit; color: inherit; cursor: pointer }
+  :focus-visible { outline: 4px solid var(--ink); outline-offset: 3px }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap }
+
+  /* The scenery behind everything: sky, drifting clouds and two hills */
+  .sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 80%) }
+  .cloud { position: absolute; background: #fff; border-radius: 999px; opacity: .9; animation: drift 50s linear infinite }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50% }
+  .cloud::before { width: 55%; height: 160%; left: 15%; bottom: 20% }
+  .cloud::after { width: 40%; height: 130%; right: 12%; bottom: 25% }
+  .c1 { width: 130px; height: 36px; top: 8%; animation-delay: -10s }
+  .c2 { width: 92px; height: 26px; top: 42%; animation-duration: 64s; animation-delay: -40s; opacity: .75 }
+  .c3 { width: 160px; height: 42px; top: 3%; animation-duration: 75s; animation-delay: -55s; opacity: .7 }
+  @keyframes drift { from { transform: translateX(-30vw) } to { transform: translateX(130vw) } }
+  .hills { position: absolute; left: 0; right: 0; bottom: 0; height: 13vh }
+  .hills::before, .hills::after { content: ""; position: absolute; bottom: -40%; border-radius: 50% }
+  .hills::before { left: -20%; width: 90%; height: 140%; background: var(--hill) }
+  .hills::after { right: -25%; width: 95%; height: 120%; background: var(--hill2) }
+  .page { max-width: 1100px; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 16px 40px }
+
+  .back { display: inline-flex; align-items: center; gap: 4px; padding: 3px 14px 3px 8px; background: #fff; border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 3px 0 var(--ink); font-size: 15px; text-decoration: none }
+  .back svg { width: 18px; height: 18px }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin: 14px 0 22px }
+  header .tv { width: clamp(80px, 20vw, 110px); flex: none; overflow: visible; animation: float 3s ease-in-out infinite }
+  @keyframes float { 50% { transform: translateY(-8px) rotate(3deg) } }
+  h1 { margin: 0; font-size: clamp(42px, 10vw, 70px); font-weight: 700; line-height: 1.02; color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 0 5px 0 var(--ink) }
+  h1 .y { color: var(--yellow) } h1 .p { color: var(--pink) }
+  header p { max-width: 640px; margin: 10px 0 0; font-size: 19px; font-weight: 600 }
+
+  /* The three videos to choose from */
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 980px; margin: 0 auto 22px }
+  .tab { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 4px solid var(--ink); border-radius: 22px; box-shadow: 0 6px 0 rgba(47, 42, 74, .25); text-decoration: none; transition: transform .2s, background-color .2s }
+  .tab:hover { transform: translateY(-3px) }
+  .tab[aria-current="true"] { background: var(--light); box-shadow: 0 6px 0 var(--ink); transform: translateY(-3px) }
+  .tab svg { width: 52px; height: 52px; flex: none }
+  .tab b { display: block; font-size: 19px; line-height: 1.15 }
+  .tab small { display: block; font-size: 14px; font-weight: 600; color: var(--soft) }
+
+  /* The player: the drawn screen, the caption, the steps and the buttons */
+  .player { max-width: min(980px, max(560px, calc((100vh - 400px) * 1.6 + 40px))); margin: 0 auto; padding: 16px; background: #fff; border: 4px solid var(--ink); border-radius: 28px; box-shadow: 0 7px 0 rgba(47, 42, 74, .25) }
+  .player h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: clamp(20px, 3vw, 26px); line-height: 1.15 }
+  .player h2 i { display: grid; place-items: center; width: 38px; height: 38px; flex: none; background: var(--c); border: 3px solid var(--ink); border-radius: 50%; color: #fff; -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; font-style: normal; font-size: 21px }
+  .stage { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #fbfaff; border: 4px solid var(--ink); border-radius: 18px; container-type: inline-size; cursor: pointer; user-select: none; -webkit-user-select: none }
+  .poster { position: absolute; z-index: 30; left: 50%; top: 50%; width: 16%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; filter: drop-shadow(0 5px 0 rgba(47, 42, 74, .3)); transition: opacity .25s }
+  .poster svg { width: 100%; height: 100% }
+  .caps { display: grid; margin: 14px 2px 4px }
+  .cap { grid-area: 1 / 1; visibility: hidden }
+  .cap.on { visibility: visible }
+  .cap-n { display: inline-block; padding: 1px 12px; background: var(--light); border: 3px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 700 }
+  .cap-t { margin: 6px 0 0; font-size: clamp(20px, 1.2vw + 14px, 30px); font-weight: 700; line-height: 1.25 }
+  .cap-t b { padding: 0 .3em; background: var(--light); border: 3px solid var(--ink); border-radius: .4em; white-space: nowrap }
+  .cap-t mark { padding: 0 .15em; background: #fff1a8; border-radius: .3em; color: inherit }
+  .cap-parts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px }
+  .cap-parts span { display: inline-flex; align-items: center; gap: 6px; padding: 2px 12px 2px 3px; background: var(--c); border: 3px solid var(--ink); border-radius: 999px; font-size: 15px; font-weight: 700 }
+  .cap-parts i { display: grid; place-items: center; width: 24px; height: 24px; background: #fff; border: 2px solid var(--ink); border-radius: 50%; font-style: normal; font-size: 13px }
+  .cap-frase { display: block; margin-top: 10px; padding: 8px 14px; background: #fff1a8; border: 3px dashed var(--ink); border-radius: 14px; font-size: clamp(15px, .5vw + 12px, 19px); font-weight: 600 }
+  .cap-frase b { padding: 0 .2em; background: #fff; border-radius: .3em }
+  .bar { display: flex; gap: 6px; margin: 6px 0 2px }
+  .seg { flex: 1; display: grid; align-items: center; height: 32px; padding: 0; background: none; border: 0; border-radius: 999px }
+  .seg span { display: block; height: 15px; overflow: hidden; background: #fff; border: 3px solid var(--ink); border-radius: 999px }
+  .seg i { display: block; width: 0; height: 100%; background: var(--c) }
+  .ctrls { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 8px 12px; margin-top: 8px }
+  .ctl { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 62px; padding: 2px; background: none; border: 0; border-radius: 14px; font-size: 14px; font-weight: 700; line-height: 1.1 }
+  .ctl .r { display: grid; place-items: center; width: 52px; height: 52px; background: #fff; border: 3px solid var(--ink); border-radius: 50%; box-shadow: 0 4px 0 var(--ink); transition: transform .1s, box-shadow .1s }
+  .ctl:hover .r { transform: translateY(-2px); box-shadow: 0 6px 0 var(--ink) }
+  .ctl:active .r { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink) }
+  .ctl .r svg { width: 26px; height: 26px }
+  .ctl.play .r { width: 66px; height: 66px; background: var(--c) }
+  .ctl.play .r svg { width: 32px; height: 32px }
+  .frames { display: grid; gap: 22px }
+  .frame { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 18px; align-items: center; margin: 0; padding-bottom: 22px; border-bottom: 3px dashed var(--line) }
+  .frame:last-child { padding-bottom: 0; border-bottom: 0 }
+  .frame .stage { cursor: default }
+  .frames .scene * { transition: none !important; animation: none !important }
+
+  .note { display: flex; align-items: center; gap: 12px; max-width: 980px; margin: 20px auto 0; padding: 12px 16px; background: #fff1a8; border: 3px solid var(--ink); border-radius: 18px; font-weight: 600 }
+  .note svg { width: 34px; height: 34px; flex: none }
+  .list { max-width: 980px; margin: 14px auto 0; padding: 12px 18px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; font-weight: 500 }
+  .list summary { font-weight: 700; cursor: pointer }
+  .list ol { margin: 10px 0 0; padding-left: 24px }
+  .list li { margin-bottom: 4px }
+  .more { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px }
+  .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 20px; background: var(--c, #fff); border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 5px 0 var(--ink); color: #fff; -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; font-size: 19px; font-weight: 700; text-decoration: none; transition: transform .1s, box-shadow .1s }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--ink) }
+  .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink) }
+  .btn.calm { background: #fff; color: var(--ink); -webkit-text-stroke: 0; font-size: 17px }
+  footer { padding: 30px 16px 10px; text-align: center; font-weight: 600 }
+
+  .player:fullscreen { max-width: none; width: 100%; height: 100%; margin: 0; padding: 2vh 3vw; overflow: auto; border: 0; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; justify-content: center }
+  .player:fullscreen h2, .player:fullscreen .live { width: min(100%, calc((100vh - 300px) * 1.6)); margin-left: auto; margin-right: auto }
+
+  /* ---------- The drawn Gemini screens: everything in em, the screen is 60em wide ---------- */
+  .scene { position: absolute; inset: 0; overflow: hidden; background: #fbfaff; font-size: 6px; font-size: calc(100cqw / 60); line-height: 1.3; color: var(--ink) }
+  .scene svg { display: block; overflow: visible }
+  .sk { display: block; width: 100%; height: .9em; background: #e6e3f2; border-radius: 1em }
+  .w5 { width: 50% !important } .w6 { width: 60% !important } .w7 { width: 70% !important } .w8 { width: 80% !important }
+  .scene .pressed { transform: translateY(.12em) scale(.95) !important; box-shadow: 0 0 0 .45em rgba(255, 210, 63, .95) !important }
+  @keyframes pop { from { transform: scale(.85); opacity: 0 } }
+  @keyframes bounce { 50% { transform: translateY(-.7em) } }
+  @keyframes blink { 50% { opacity: 0 } }
+  @keyframes scan { 50% { top: 78% } }
+
+  .s-bar { position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 4.6em; display: flex; align-items: center; gap: 1em; padding: 0 1.4em; background: #fff; border-bottom: .25em solid var(--ink) }
+  .s-menu { display: grid; place-items: center; width: 3.4em; height: 3.4em; border-radius: 50%; transition: transform .15s, box-shadow .2s }
+  .s-menu svg { width: 2.1em; height: 2.1em }
+  .s-brand { font-size: 2.3em; font-weight: 700 }
+  .s-av { width: 3em; height: 3em; margin-left: auto }
+  .s-body { position: absolute; left: 0; right: 0; top: 4.6em; bottom: 0 }
+
+  .s-chat { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; display: flex; flex-direction: column; padding: 1em 6em 1.4em; transition: width .7s cubic-bezier(.5, 0, .3, 1), padding .7s cubic-bezier(.5, 0, .3, 1) }
+  .scene[data-split] .s-chat { width: 42%; padding: 1em 1.2em 1.2em }
+  .s-hello { position: absolute; left: 0; right: 0; top: 24%; margin: 0; text-align: center; font-size: 3.4em; font-weight: 700; color: #a49ecb; transition: opacity .3s }
+  .scene[data-sent1] .s-hello { opacity: 0 }
+  .s-msgs { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 1em; padding-bottom: 1em; overflow: hidden }
+  .s-you { display: none; flex: none; align-self: flex-end; max-width: 88%; padding: .5em .8em; background: #fff; border: .18em solid var(--ink); border-radius: 1em 1em .3em 1em; box-shadow: 0 .2em 0 rgba(47, 42, 74, .15); font-size: 1.3em; line-height: 1.4; font-weight: 500 }
+  .scene[data-split] .s-you { font-size: 1.1em }
+  .s-ai { display: none; flex: none; align-self: flex-start; width: 80%; flex-direction: column; gap: .5em }
+  .scene[data-sent1] .m1, .scene[data-sent2] .m2, .scene[data-asked] .ge-q { display: block; animation: pop .35s cubic-bezier(.3, 1.6, .6, 1) }
+  .scene[data-reply1] .m1r, .scene[data-reply2] .m2r, .scene[data-answered] .ge-a { display: flex; animation: pop .35s cubic-bezier(.3, 1.6, .6, 1) }
+  .s-doc { display: flex; align-items: center; gap: .6em; padding: .5em .8em; background: #fff; border: .2em solid var(--ink); border-radius: .9em; box-shadow: 0 .25em 0 rgba(47, 42, 74, .18) }
+  .s-doc svg { width: 2.6em; height: 2.6em; flex: none }
+  .s-doc b { display: block; font-size: 1.3em; line-height: 1.1 }
+  .s-doc small { display: block; font-size: 1.05em; font-weight: 600; color: var(--soft) }
+  .s-think { display: none; flex: none; gap: .5em; padding: .6em 0 }
+  .scene[data-think] .s-chat .s-think, .scene[data-think2] .ge-test .s-think { display: flex }
+  .s-think i { width: 1.1em; height: 1.1em; background: var(--purple); border: .15em solid var(--ink); border-radius: 50%; animation: bounce .9s ease-in-out infinite }
+  .s-think i:nth-child(2) { animation-delay: .15s } .s-think i:nth-child(3) { animation-delay: .3s }
+
+  .s-comp { position: relative; flex: none; padding: .8em .9em .7em 1.2em; background: #fff; border: .25em solid var(--ink); border-radius: 1.6em; box-shadow: 0 .3em 0 rgba(47, 42, 74, .2); transition: transform .15s, box-shadow .2s }
+  .s-field { min-height: 1.4em; font-size: 1.55em; line-height: 1.4; font-weight: 500 }
+  .scene[data-split] .s-field { font-size: 1.3em }
+  .s-ph { color: #a29dc0 }
+  .s-field.has .s-ph, .ge-box.has .s-ph { display: none }
+  .typed.caret::after { content: ""; display: inline-block; width: .09em; height: 1.1em; margin-left: .05em; vertical-align: -.18em; background: var(--ink); animation: blink .8s steps(1) infinite }
+  .pt { padding: 0 .12em; border-radius: .3em; -webkit-box-decoration-break: clone; box-decoration-break: clone }
+  .pt::before { content: attr(data-l); display: inline-grid; place-items: center; width: 1.15em; height: 1.15em; margin-right: .2em; vertical-align: .1em; background: var(--c); border: .1em solid var(--ink); border-radius: 50%; color: #fff; -webkit-text-stroke: .16em var(--ink); paint-order: stroke fill; font-size: .68em; font-weight: 700 }
+  .pt:empty { display: none }
+  .pt.p { --c: #4da3ff; background: #cfe6ff } .pt.t { --c: #4fd6a6; background: #c9f5e3 } .pt.c { --c: #ffd23f; background: #fff1a8 } .pt.f { --c: #ff8a3d; background: #ffdcc4 }
+  .hl { padding: 0 .1em; background: #e2dbff; border-radius: .3em; font-weight: 700 }
+  .hl:empty { display: none }
+  .s-row { display: flex; align-items: center; gap: .6em; margin-top: .6em }
+  .s-pill { display: inline-flex; align-items: center; gap: .4em; padding: .3em .9em .3em .6em; background: #fff; border: .2em solid var(--ink); border-radius: 999px; font-size: 1.3em; font-weight: 600; white-space: nowrap; transition: transform .15s, box-shadow .2s, background-color .2s }
+  .s-pill svg { width: 1.3em; height: 1.3em; flex: none }
+  .s-chip { display: none; background: #c9f5e3 }
+  .scene[data-canvas] .s-chip { display: inline-flex }
+  .scene[data-split] .s-tools > span { display: none }
+  .scene[data-split] .s-tools { padding: .3em .5em }
+  .s-send { display: grid; place-items: center; width: 3.2em; height: 3.2em; flex: none; margin-left: auto; background: #ebe8f6; border: .2em solid var(--ink); border-radius: 50%; transition: background-color .2s, transform .15s, box-shadow .2s }
+  .s-send svg { width: 1.7em; height: 1.7em }
+  .s-comp.has .s-send { background: var(--purple) }
+  .s-tmenu { position: absolute; left: .6em; bottom: calc(100% + .7em); width: 19em; padding: .5em; background: #fff; border: .25em solid var(--ink); border-radius: 1.2em; box-shadow: 0 .35em 0 rgba(47, 42, 74, .2); opacity: 0; visibility: hidden; transform: translateY(.8em) scale(.95); transform-origin: 20% 100%; transition: opacity .25s, visibility .25s, transform .3s cubic-bezier(.3, 1.4, .6, 1) }
+  .scene[data-tools] .s-tmenu { opacity: 1; visibility: visible; transform: none }
+  .s-item { display: flex; align-items: center; gap: .8em; padding: .55em .7em; border-radius: .8em; transition: transform .15s, box-shadow .2s }
+  .s-item i { width: 2.4em; height: 2.4em; flex: none; background: #eeecf7; border-radius: .7em }
+  .s-item b { flex: 1; height: .9em; background: #e6e3f2; border-radius: 1em }
+  .s-item svg { width: 2.4em; height: 2.4em; flex: none }
+  .s-item span { font-size: 1.6em; font-weight: 700 }
+
+  .s-panel { position: absolute; z-index: 2; top: 0; right: 0; bottom: 0; width: 58%; display: flex; flex-direction: column; background: #fff; border-left: .25em solid var(--ink); transform: translateX(102%); transition: transform .7s cubic-bezier(.5, 0, .3, 1) }
+  .scene[data-split] .s-panel { transform: none }
+  .s-pbar { flex: none; display: flex; align-items: center; gap: .8em; height: 4.4em; padding: 0 1em 0 1.4em; border-bottom: .2em solid #e6e3f2 }
+  .s-ptitle { font-size: 1.6em; font-weight: 700 }
+  .s-share { margin-left: auto }
+  .s-game, .mini { position: relative; overflow: hidden; display: grid; place-items: center; background: linear-gradient(#a9dcff, #e4f4ff) }
+  .s-game { flex: 1 }
+  .s-game::before, .s-game::after, .mini::before, .mini::after, .v-phone::before, .v-qr::before { content: ""; position: absolute; bottom: -4em; height: 8em; border-radius: 50% }
+  .s-game::before, .mini::before, .v-phone::before, .v-qr::before { left: -10%; width: 70%; background: var(--hill) }
+  .s-game::after, .mini::after { right: -15%; width: 75%; height: 6.5em; background: var(--hill2) }
+  .g-in { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 1.1em }
+  .g-stars { display: flex; gap: .5em }
+  .g-stars svg { width: 2.6em; height: 2.6em }
+  .g-q { font-size: 4.2em; font-weight: 700; line-height: 1; color: #fff; -webkit-text-stroke: .12em var(--ink); paint-order: stroke fill; text-shadow: 0 .07em 0 var(--ink) }
+  .g-ans { display: flex; gap: 1em }
+  .g-b { display: grid; place-items: center; width: 2.6em; height: 1.9em; background: var(--c); border: .09em solid var(--ink); border-radius: .4em; box-shadow: 0 .12em 0 var(--ink); color: #fff; -webkit-text-stroke: .12em var(--ink); paint-order: stroke fill; font-size: 2.5em; font-weight: 700; transition: background-color .2s, transform .15s, box-shadow .2s }
+  .b12 { --c: var(--blue) } .b13 { --c: var(--purple) } .b15 { --c: var(--orange) }
+  .scene[data-game="bug"] .s-game .b13 { --c: var(--pink) }
+  .scene[data-game="ok"] .s-game .b13 { --c: var(--mint) }
+  .scene[data-game="ok"] .s-game .s1 path { fill: var(--yellow) }
+  .g-say { display: grid; place-items: center; height: 2.8em }
+  .g-msg { display: none; align-items: center; gap: .3em; padding: .15em .7em .15em .35em; border: .1em solid var(--ink); border-radius: 999px; box-shadow: 0 .1em 0 var(--ink); font-size: 1.9em; font-weight: 700; transform: rotate(-3deg) }
+  .g-msg svg { width: 1.1em; height: 1.1em }
+  .g-msg.bad { background: #ffd6e3 } .g-msg.good { background: #c9f5e3 }
+  .scene[data-game="bug"] .s-game .g-msg.bad, .scene[data-game="ok"] .s-game .g-msg.good { display: inline-flex; animation: pop .35s cubic-bezier(.3, 1.6, .6, 1) }
+  .g-load { position: absolute; z-index: 2; inset: 0; display: none; place-items: center; background: rgba(255, 255, 255, .85) }
+  .g-load div { display: flex; gap: .7em }
+  .g-load i { width: 1.6em; height: 1.6em; background: var(--purple); border: .2em solid var(--ink); border-radius: 50%; animation: bounce .9s ease-in-out infinite }
+  .g-load i:nth-child(2) { animation-delay: .15s } .g-load i:nth-child(3) { animation-delay: .3s }
+  .scene[data-gen] .g-load { display: grid }
+  .mini { position: absolute; inset: 0; font-size: .6em; opacity: 0; transition: opacity .35s }
+  .mini .g-say { display: none }
+
+  .s-pop { position: absolute; z-index: 6; top: 4.9em; right: .8em; width: 24em; padding: 1em 1.1em 1.1em; background: #fff; border: .25em solid var(--ink); border-radius: 1.2em; box-shadow: 0 .4em 0 rgba(47, 42, 74, .25); opacity: 0; visibility: hidden; transform: translateY(-.6em) scale(.96); transform-origin: 85% 0; transition: opacity .25s, visibility .25s, transform .3s cubic-bezier(.3, 1.4, .6, 1) }
+  .scene[data-share] .s-pop { opacity: 1; visibility: visible; transform: none }
+  .s-pop p { margin: 0 0 .8em; font-size: 1.35em; font-weight: 600; line-height: 1.3 }
+  .pop-b { display: none } .scene[data-link] .pop-a { display: none } .scene[data-link] .pop-b { display: block }
+  .s-link { display: none; align-items: center; gap: .5em; margin-bottom: .8em; padding: .5em .7em; background: #f3f1fb; border: .18em solid var(--ink); border-radius: .8em; font-size: 1.25em; font-weight: 600 }
+  .s-link svg { width: 1.3em; height: 1.3em; flex: none }
+  .s-link i { flex: 1; height: .7em; background: #d9d5ea; border-radius: 1em }
+  .scene[data-link] .s-link { display: flex }
+  .s-act { display: flex; justify-content: center; align-items: center; gap: .4em; padding: .4em 1em; background: var(--orange); border: .14em solid var(--ink); border-radius: 999px; box-shadow: 0 .18em 0 var(--ink); color: #fff; -webkit-text-stroke: .2em var(--ink); paint-order: stroke fill; font-size: 1.5em; font-weight: 700; transition: transform .15s, box-shadow .2s, background-color .2s }
+  .s-act svg { width: 1.1em; height: 1.1em }
+  .s-act .a2, .s-act .a3 { display: none }
+  .scene[data-link] .s-act .a1 { display: none } .scene[data-link] .s-act .a2 { display: inline }
+  .scene[data-copied] .s-act { background: var(--mint) } .scene[data-copied] .s-act .a2 { display: none } .scene[data-copied] .s-act .a3 { display: inline-flex; align-items: center; gap: .3em }
+
+  .v { position: absolute; z-index: 10; inset: 0; overflow: hidden; opacity: 0; visibility: hidden; transform: scale(1.03); transition: opacity .45s, visibility .45s, transform .5s cubic-bezier(.3, 1.2, .6, 1) }
+  .scene[data-view="phone"] .v-phone, .scene[data-view="class"] .v-class, .scene[data-view="qr"] .v-qr { opacity: 1; visibility: visible; transform: none }
+  .v-phone, .v-qr { background: linear-gradient(#a9dcff, #e4f4ff) }
+  .v-class { background: #c9f5e3 }
+  .ph { position: absolute; z-index: 1; left: 8em; top: 1.6em; width: 17em; height: 34em; padding: 2.2em .9em .9em; background: #fff; border: .3em solid var(--ink); border-radius: 2.4em; box-shadow: 0 .5em 0 rgba(47, 42, 74, .25); overflow: hidden }
+  .ph-notch { position: absolute; top: .7em; left: 50%; width: 4.5em; height: .8em; margin-left: -2.25em; background: var(--ink); border-radius: 1em }
+  .ph-top { display: flex; align-items: center; gap: .5em; padding: .45em .55em; background: #e2dbff; border: .18em solid var(--ink); border-radius: 1em }
+  .ph-top svg { width: 2.2em; height: 2.2em; flex: none }
+  .ph-url { flex: 1; min-width: 0; display: flex; align-items: center; height: 2.4em; padding: 0 .7em; background: #fff; border: .16em solid var(--ink); border-radius: 999px; white-space: nowrap; overflow: hidden; transition: transform .15s, box-shadow .2s }
+  .ph-url span { font-size: 1.15em; font-weight: 600 }
+  .ph-url .u0 { color: #a29dc0 }
+  .ph-url .u1 { display: none; align-items: center; gap: .3em }
+  .ph-url .u1 svg { width: 1.1em; height: 1.1em }
+  .ph-url .u1 i { display: inline-block; width: 3em; height: .55em; background: #d9d5ea; border-radius: 1em }
+  .scene[data-url] .ph-url .u0 { display: none } .scene[data-url] .ph-url .u1 { display: flex }
+  .ph-screen { position: relative; height: calc(100% - 3.6em); margin-top: .8em; overflow: hidden; background: #f3f1fb; border-radius: 1.2em }
+  .ph-blank { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6em; background: #e2dbff; transition: opacity .3s }
+  .ph-blank svg { width: 6em; height: 6em }
+  .ph-blank b { font-size: 1.5em }
+  .scene[data-phgame] .ph-blank { opacity: 0 }
+  .scene[data-phgame] .v-phone .mini, .scene[data-qr="open"] .v-qr .mini { opacity: 1 }
+  .ph-note { position: absolute; z-index: 1; left: 30em; top: 7.5em; width: 25em; padding: 1.4em 1.6em; background: #fff; border: .25em solid var(--ink); border-radius: 1.6em; box-shadow: 0 .4em 0 rgba(47, 42, 74, .2) }
+  .ph-note b { display: block; font-size: 2.1em; line-height: 1.1 }
+  .ph-note p { margin: .5em 0 0; font-size: 1.5em; font-weight: 500; line-height: 1.3 }
+  .ok-badge { position: absolute; right: -1em; bottom: -2.4em; display: inline-flex; align-items: center; gap: .3em; padding: .2em .8em .2em .35em; background: var(--mint); border: .12em solid var(--ink); border-radius: 999px; box-shadow: 0 .12em 0 var(--ink); color: #fff; -webkit-text-stroke: .14em var(--ink); paint-order: stroke fill; font-size: 2.2em; font-weight: 700; transform: rotate(-5deg) scale(0); transition: transform .35s cubic-bezier(.3, 1.6, .6, 1) }
+  .ok-badge svg { width: 1.1em; height: 1.1em }
+  .scene[data-phok] .ok-badge { transform: rotate(-5deg) }
+
+  .cl-win { position: absolute; left: 7em; right: 7em; top: 3.5em; overflow: hidden; background: #fff; border: .25em solid var(--ink); border-radius: 1.4em; box-shadow: 0 .45em 0 rgba(47, 42, 74, .2) }
+  .cl-bar { display: flex; align-items: center; gap: .7em; height: 4.4em; padding: 0 1.4em; border-bottom: .22em solid var(--ink) }
+  .cl-bar svg { width: 2.8em; height: 2.8em }
+  .cl-bar b { font-size: 1.9em }
+  .cl-body { padding: 1.3em 1.8em }
+  .cl-head { display: flex; align-items: flex-end; height: 5.6em; padding: .7em 1.2em; background: var(--blue); border: .22em solid var(--ink); border-radius: 1em }
+  .cl-head b { font-size: 2.2em; color: #fff; -webkit-text-stroke: .16em var(--ink); paint-order: stroke fill }
+  .cl-post { margin-top: 1.2em; padding: 1em 1.3em; border: .22em solid var(--ink); border-radius: 1.1em; box-shadow: 0 .25em 0 rgba(47, 42, 74, .15) }
+  .cl-top { display: flex; align-items: center; gap: .7em }
+  .cl-top svg { width: 2.8em; height: 2.8em; flex: none }
+  .cl-top span { font-size: 1.5em; font-weight: 600 }
+  .cl-att { display: none; align-items: center; gap: .6em; margin-top: .9em; padding: .5em .9em; background: #fff1a8; border: .2em solid var(--ink); border-radius: .9em; animation: pop .35s cubic-bezier(.3, 1.6, .6, 1) }
+  .cl-att svg { width: 1.8em; height: 1.8em; flex: none }
+  .cl-att b { font-size: 1.4em }
+  .scene[data-attach] .cl-att { display: flex }
+  .cl-foot { display: flex; justify-content: flex-end; margin-top: .9em }
+  .cl-btn { background: var(--purple); color: #fff; -webkit-text-stroke: .2em var(--ink); paint-order: stroke fill; font-size: 1.5em; font-weight: 700 }
+  .cl-btn .b2, .ge-save .b2 { display: none }
+  .scene[data-posted] .cl-btn, .scene[data-saved] .ge-save { background: var(--mint) }
+  .scene[data-posted] .cl-btn .b1, .scene[data-saved] .ge-save .b1 { display: none }
+  .scene[data-posted] .cl-btn .b2, .scene[data-saved] .ge-save .b2 { display: inline-flex; align-items: center; gap: .3em }
+  .cl-btn svg, .ge-save svg { width: 1.1em; height: 1.1em }
+
+  .qr-board { position: absolute; z-index: 1; left: 5em; top: 2.2em; width: 27em; height: 29.5em; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8em; background: #fff; border: .3em solid var(--ink); border-radius: 1.4em; box-shadow: 0 .45em 0 rgba(47, 42, 74, .2) }
+  .qr-board b { font-size: 2.1em }
+  .qr-board span { font-size: 1.45em; font-weight: 600 }
+  .qr { width: 17em; height: 17em }
+  .qr svg { width: 100%; height: 100% }
+  .qr-ph { left: 37em; top: 4.5em; width: 15em; height: 29em; transform: translateY(130%) rotate(6deg); transition: transform .6s cubic-bezier(.3, 1.2, .6, 1) }
+  .scene[data-qr] .qr-ph { transform: rotate(6deg) }
+  .qr-ph .ph-screen { height: 100%; margin: 0 }
+  .qr-ph .mini { font-size: .5em }
+  .qr-cam { position: absolute; inset: 0; display: grid; place-items: center; background: #e2dbff }
+  .qr-cam .qr { position: relative; width: 8.5em; height: 8.5em; padding: .5em; background: #fff; border: .2em dashed var(--ink); border-radius: .6em }
+  .qr-cam .scan { position: absolute; left: 12%; right: 12%; top: 22%; height: .35em; background: var(--mint); border-radius: 1em; box-shadow: 0 0 0 .12em var(--ink); animation: scan 1.6s ease-in-out infinite }
+
+  .s-care { position: absolute; z-index: 15; inset: 0; display: grid; place-items: center; background: rgba(251, 250, 255, .88); opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s }
+  .scene[data-care] .s-care { opacity: 1; visibility: visible }
+  .care-card { display: flex; align-items: center; gap: 1.8em; width: 46em; padding: 2em 2.4em; background: #ffd6e3; border: .3em solid var(--ink); border-radius: 2em; box-shadow: 0 .5em 0 rgba(47, 42, 74, .25); transform: scale(.85); transition: transform .45s cubic-bezier(.3, 1.5, .6, 1) }
+  .scene[data-care] .care-card, .scene[data-care] .care-two { transform: none }
+  .care-card > svg { width: 8em; height: 8em; flex: none }
+  .care-card b { display: block; font-size: 3em; line-height: 1.05 }
+  .care-card p { margin: .4em 0 0; font-size: 2em; font-weight: 600; line-height: 1.25 }
+  .care-x { display: flex; gap: 1em; margin-top: 1em }
+  .care-x svg { width: 4.6em; height: 4.6em }
+  .care-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4em; width: 50em; transform: scale(.85); transition: transform .45s cubic-bezier(.3, 1.5, .6, 1) }
+  .care-two > b { grid-column: 1 / -1; text-align: center; font-size: 3em; color: #fff; -webkit-text-stroke: .14em var(--ink); paint-order: stroke fill; text-shadow: 0 .08em 0 var(--ink) }
+  .care-two div { display: flex; flex-direction: column; align-items: center; gap: .8em; padding: 1.8em 1.4em; border: .3em solid var(--ink); border-radius: 1.8em; box-shadow: 0 .5em 0 rgba(47, 42, 74, .25); text-align: center }
+  .care-two div svg { width: 5.6em; height: 5.6em }
+  .care-two div span { font-size: 2.3em; font-weight: 700; line-height: 1.15 }
+  .care-two .yes { background: #c9f5e3 } .care-two .no { background: #ffd6e3 }
+
+  .side { position: absolute; z-index: 5; left: 0; top: 0; bottom: 0; width: 19em; display: flex; flex-direction: column; gap: 1.1em; padding: 1.4em 1.2em; background: #f3f1ff; border-right: .25em solid var(--ink); transform: translateX(-104%); transition: transform .45s cubic-bezier(.5, 0, .3, 1) }
+  .scene[data-side] .side { transform: none }
+  .side-scrim { position: absolute; z-index: 4; inset: 0; background: rgba(47, 42, 74, .12); opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s }
+  .scene[data-side] .side-scrim { opacity: 1; visibility: visible }
+  .side-gems { display: flex; align-items: center; gap: .7em; padding: .6em .8em; background: #fff; border: .2em solid var(--ink); border-radius: 1em; transition: transform .15s, box-shadow .2s }
+  .side-gems svg { width: 2.6em; height: 2.6em; flex: none }
+  .side-gems span { font-size: 1.8em; font-weight: 700 }
+  .gv { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s }
+  .scene[data-gv="home"] .gv-home, .scene[data-gv="list"] .gv-list, .scene[data-gv="edit"] .gv-edit { opacity: 1; visibility: visible }
+  .gv-home .s-comp { position: absolute; left: 6em; right: 6em; bottom: 1.4em }
+  .gv-list { padding: 2.2em 4em }
+  .gl-top { display: flex; align-items: center; justify-content: space-between }
+  .gl-h { font-size: 3em; font-weight: 700 }
+  .gl-new { background: var(--purple); color: #fff; -webkit-text-stroke: .2em var(--ink); paint-order: stroke fill; font-size: 1.7em; font-weight: 700; box-shadow: 0 .15em 0 var(--ink) }
+  .gl-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4em; margin-top: 2.2em }
+  .gl-card { display: flex; flex-direction: column; gap: .8em; padding: 1.3em; background: #fff; border: .22em solid var(--ink); border-radius: 1.2em; box-shadow: 0 .3em 0 rgba(47, 42, 74, .15) }
+  .gl-card svg { width: 3.6em; height: 3.6em }
+  .ge-form { position: absolute; left: 0; top: 0; bottom: 0; width: 35em; display: flex; flex-direction: column; padding: 1.1em 1.4em 1.3em 2em }
+  .ge-h { font-size: 2.1em; font-weight: 700 }
+  .ge-l { margin: .6em 0 .25em; font-size: 1.3em; font-weight: 700; color: var(--soft) }
+  .ge-box { flex: none; padding: .45em .8em; background: #fff; border: .2em solid var(--ink); border-radius: .8em; transition: transform .15s, box-shadow .2s }
+  .ge-name { display: flex; align-items: center; min-height: 3.4em }
+  .ge-name .typed, .ge-name .s-ph { font-size: 1.5em; font-weight: 600 }
+  .ge-ins { flex: 1; min-height: 0; overflow: hidden }
+  .ge-ins .s-ph { font-size: 1.3em }
+  .ge-text { display: none; font-size: 1.28em; line-height: 1.55; font-weight: 500 }
+  .scene[data-paste] .ge-text { display: block; animation: pop .35s ease-out }
+  .scene[data-paste] .ge-ins .s-ph { display: none }
+  .ge-sk { display: grid; gap: .6em; margin-top: .9em }
+  .ge-sk i { height: .7em; background: #e6e3f2; border-radius: 1em }
+  .bw { display: inline-block; min-width: .8em; border-radius: .3em; transition: transform .15s, box-shadow .2s }
+  .br, .fl { padding: 0 .15em; border-radius: .3em; font-weight: 700 }
+  .br { background: #fff1a8; box-shadow: inset 0 -.14em 0 var(--yellow) }
+  .fl { display: none; background: #c9f5e3; box-shadow: inset 0 -.14em 0 var(--mint) }
+  .scene[data-f1] .bw1 .br, .scene[data-f2] .bw2 .br { display: none }
+  .scene[data-f1] .bw1 .fl, .scene[data-f2] .bw2 .fl { display: inline }
+  .ge-save { position: absolute; top: .75em; right: 1em; font-size: 1.5em; font-weight: 700 }
+  .ge-test { position: absolute; left: 36em; right: 1.4em; top: 5em; bottom: 1.3em; display: flex; flex-direction: column; padding: .8em; background: #f3f1fb; border: .2em solid var(--ink); border-radius: 1.2em }
+  .ge-test .s-msgs { padding-bottom: .6em }
+  .ge-test .s-you { max-width: 94%; font-size: 1.15em }
+  .ge-a { width: 92%; padding: .7em; background: #fff; border: .18em solid var(--ink); border-radius: 1em }
+  .ge-a .row { display: flex; gap: .4em }
+  .ge-a .row i { height: 1.3em; flex: 1; background: #e6e3f2; border-radius: .4em }
+  .ge-a .row i:first-child { flex: .5; background: #cfe6ff }
+  .ge-comp { display: flex; align-items: flex-end; gap: .5em; padding: .5em .5em .5em .9em; border-radius: 1.2em }
+  .ge-comp .s-field { flex: 1; font-size: 1.15em }
+  .ge-comp .s-send { width: 2.6em; height: 2.6em }
+
+  .hand { position: absolute; z-index: 20; left: 80%; top: 80%; width: 4.4em; height: 5.9em; margin: -.3em 0 0 -1.9em; transform-origin: 1.9em .3em; transform: rotate(-14deg); filter: drop-shadow(0 .3em 0 rgba(47, 42, 74, .25)); pointer-events: none; transition: opacity .3s, transform .12s }
+  .hand svg { width: 100%; height: 100% }
+  .hand.down { transform: rotate(-14deg) scale(.86) }
+  .scene[data-hidehand] .hand { opacity: 0 }
+  .ripple { position: absolute; z-index: 19; width: 4.4em; height: 4.4em; margin: -2.2em 0 0 -2.2em; border: .4em solid var(--yellow); border-radius: 50%; opacity: 0; pointer-events: none }
+
+  @media (max-width: 760px) {
+    .frame { grid-template-columns: 1fr }
+    .full-btn { display: none !important }
+  }
+  @media (max-width: 640px) {
+    .tabs { gap: 8px }
+    .tab { flex-direction: column; justify-content: center; gap: 4px; padding: 8px 4px; border-radius: 18px; text-align: center }
+    .tab svg { width: 40px; height: 40px }
+    .tab b { font-size: 15px }
+    .tab small { font-size: 12px }
+    .player { padding: 10px; border-radius: 22px }
+    .stage { border-width: 3px; border-radius: 14px }
+    .ctrls { gap: 6px 4px }
+    .ctl { min-width: 58px; font-size: 13px }
+    .ctl .r { width: 48px; height: 48px }
+    .ctl.play .r { width: 60px; height: 60px }
+    .note { font-size: 15px }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important }
+  }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="hills"></div></div>
+
+<div class="page">
+  <a class="back" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4.5 L7.5 12 L15 19.5" fill="none" stroke="#2f2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Oficina de Prompts</a>
+
+  <header>
+    <svg class="tv" viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M36 8 L50 22 L64 8" fill="none" stroke="#2f2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="6" y="22" width="84" height="60" rx="14" fill="#ff8a3d" stroke="#2f2a4a" stroke-width="5"/>
+      <rect x="16" y="31" width="64" height="42" rx="8" fill="#cdeeff" stroke="#2f2a4a" stroke-width="4"/>
+      <path d="M41 41 L59 52 L41 63 Z" fill="#fff" stroke="#2f2a4a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M26 82 L22 92 M70 82 L74 92" stroke="#2f2a4a" stroke-width="5" stroke-linecap="round"/>
+      <g transform="translate(66 52) rotate(-14) scale(.62)"><path d="M20 40 V10 A6 6 0 0 1 32 10 V34 C32 30 41 30 41 35 C41 31 50 31 50 37 C50 33 57 34 57 40 V54 C57 64 50 70 41 70 H31 C26 70 22 67 19 63 L9 49 C6 45 11 40 15 43 L20 48 Z" fill="#ffd9b8" stroke="#2f2a4a" stroke-width="5" stroke-linejoin="round"/><rect x="22" y="68" width="32" height="11" rx="3" fill="#8c73ff" stroke="#2f2a4a" stroke-width="5"/></g>
+    </svg>
+    <div>
+      <h1><span class="y">Passo</span> a <span class="p">passo</span></h1>
+      <p>Três vídeos curtos para as partes do Gemini em que a gente mais trava. Toque em Tocar e siga o dedinho.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Escolha o vídeo">
+    <a class="tab" href="#canvas" data-id="canvas" style="--light: #c9f5e3">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="10" width="56" height="44" rx="8" fill="#fff" stroke="#2f2a4a" stroke-width="4"/><path d="M28 10 V54" stroke="#2f2a4a" stroke-width="3.5"/><rect x="9" y="18" width="14" height="7" rx="3.5" fill="#cfe6ff" stroke="#2f2a4a" stroke-width="2.5"/><rect x="9" y="31" width="14" height="7" rx="3.5" fill="#e2dbff" stroke="#2f2a4a" stroke-width="2.5"/><rect x="33" y="16" width="22" height="32" rx="4" fill="#4fd6a6" stroke="#2f2a4a" stroke-width="3"/><path d="M44 22 L46.5 27.5 L52 28 L48 32 L49 38 L44 35 L39 38 L40 32 L36 28 L41.5 27.5 Z" fill="#ffd23f" stroke="#2f2a4a" stroke-width="2.2" stroke-linejoin="round"/></svg>
+      <span><b>Abrir o Canvas</b><small>Vídeo 1</small></span>
+    </a>
+    <a class="tab" href="#compartilhar" data-id="compartilhar" style="--light: #ffdcc4">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(-40 32 32)"><rect x="5" y="22" width="30" height="20" rx="10" fill="none" stroke="#2f2a4a" stroke-width="10"/><rect x="5" y="22" width="30" height="20" rx="10" fill="none" stroke="#ff8a3d" stroke-width="4"/><rect x="29" y="22" width="30" height="20" rx="10" fill="none" stroke="#2f2a4a" stroke-width="10"/><rect x="29" y="22" width="30" height="20" rx="10" fill="none" stroke="#ffd23f" stroke-width="4"/><path d="M29 27 V37" stroke="#ff8a3d" stroke-width="4"/></g></svg>
+      <span><b>Compartilhar</b><small>Vídeo 2</small></span>
+    </a>
+    <a class="tab" href="#gem" data-id="gem" style="--light: #e2dbff">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 24 L20 8 H44 L56 24 L32 58 Z" fill="#8c73ff" stroke="#2f2a4a" stroke-width="4" stroke-linejoin="round"/><path d="M8 24 H56 M20 8 L26 24 L32 58 L38 24 L44 8 M26 24 L32 8 L38 24" fill="none" stroke="#2f2a4a" stroke-width="3" stroke-linejoin="round"/><path d="M18 18 L22 14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+      <span><b>Criar um Gem</b><small>Vídeo 3</small></span>
+    </a>
+  </nav>
+
+  <section class="player" id="player" aria-labelledby="player-title">
+    <h2 id="player-title"><i id="player-n">1</i><span id="player-name"></span></h2>
+    <div class="live" id="live-box">
+      <div class="stage" id="stage" aria-hidden="true"><div class="scene" id="scene"></div><span class="poster" id="poster"></span></div>
+      <div class="caps" id="caps" aria-hidden="true"></div>
+      <p class="sr" id="live" aria-live="polite"></p>
+      <div class="bar" id="bar" role="group" aria-label="Passos do vídeo"></div>
+      <div class="ctrls">
+        <button class="ctl" id="prev" type="button" aria-label="Voltar um passo"><span class="r"></span>Voltar</button>
+        <button class="ctl play" id="play" type="button"><span class="r"></span><span class="lbl">Tocar</span></button>
+        <button class="ctl" id="next" type="button"><span class="r"></span><span class="lbl">Avançar</span></button>
+        <button class="ctl" id="again" type="button" aria-label="Recomeçar o vídeo"><span class="r"></span>Recomeçar</button>
+        <button class="ctl full-btn" id="full" type="button" hidden><span class="r"></span><span class="lbl">Tela cheia</span></button>
+      </div>
+    </div>
+    <div class="frames" id="frames" hidden></div>
+  </section>
+
+  <p class="note"><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" fill="#4da3ff" stroke="#2f2a4a" stroke-width="3"/><path d="M18 16 V26" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="18" cy="10.5" r="2.4" fill="#fff"/></svg>O nome dos botões pode mudar um pouco com as atualizações do Gemini, mas o caminho é parecido.</p>
+  <details class="list" id="list-box"><summary>Ler os passos deste vídeo</summary><ol id="list"></ol></details>
+
+  <div class="more">
+    <a class="btn" href="guia.html" style="--c: var(--mint)">Guia do professor</a>
+    <a class="btn" href="gems.html" style="--c: var(--purple)">Gems prontos</a>
+    <a class="btn calm" href="construtor.html">Construtor de prompts</a>
+  </div>
+</div>
+
+<footer>Oficina de Prompts para Professores · Engenharia de Software · UNIPAMPA</footer>
+
+<script>
+// Drawn icons, used by the screens and the buttons
+const INK = "#2f2a4a"
+const I = {
+  menu: `<svg viewBox="0 0 24 24"><path d="M4 6.5 H20 M4 12 H20 M4 17.5 H20" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+  avatar: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#ffd23f" stroke="${INK}" stroke-width="2.5"/><circle cx="16" cy="13" r="5" fill="#fff" stroke="${INK}" stroke-width="2.2"/><path d="M7.5 25.5 C9 20 23 20 24.5 25.5" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  sliders: `<svg viewBox="0 0 24 24"><path d="M4 8 H20 M4 16 H20" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><circle cx="9" cy="8" r="2.8" fill="#ffd23f" stroke="${INK}" stroke-width="2.2"/><circle cx="15" cy="16" r="2.8" fill="#4da3ff" stroke="${INK}" stroke-width="2.2"/></svg>`,
+  canvas: `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="#fff" stroke="${INK}" stroke-width="2.2"/><path d="M11.5 4 V20" stroke="${INK}" stroke-width="2"/><path d="M5.5 9 H9 M5.5 13 H8.5" stroke="#8cc4ff" stroke-width="2" stroke-linecap="round"/><rect x="13.8" y="7.5" width="4.6" height="4.6" rx="1" fill="#4fd6a6" stroke="${INK}" stroke-width="1.6"/><rect x="13.8" y="14" width="4.6" height="3" rx="1" fill="#ff8a3d" stroke="${INK}" stroke-width="1.6"/></svg>`,
+  up: `<svg viewBox="0 0 24 24"><path d="M12 4 L19 11.5 H14.5 V20 H9.5 V11.5 H5 Z" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/></svg>`,
+  share: `<svg viewBox="0 0 24 24"><path d="M9 6 H6 A2 2 0 0 0 4 8 V18 A2 2 0 0 0 6 20 H16 A2 2 0 0 0 18 18 V15" fill="none" stroke="${INK}" stroke-width="2.3" stroke-linecap="round"/><path d="M11 13 L20 4 M14 4 H20 V10" fill="none" stroke="#ff8a3d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  link: `<svg viewBox="0 0 24 24"><path d="M10 14 L14 10 M8.5 11.5 L6 14 A3.5 3.5 0 0 0 11 19 L13.5 16.5 M15.5 12.5 L18 10 A3.5 3.5 0 0 0 13 5 L10.5 7.5" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/></svg>`,
+  check: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#4fd6a6" stroke="${INK}" stroke-width="2.4"/><path d="M7 12.5 L10.5 16 L17 8.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  cross: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ff5f8f" stroke="${INK}" stroke-width="2.4"/><path d="M8 8 L16 16 M16 8 L8 16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`,
+  game: `<svg viewBox="0 0 64 64"><rect x="4" y="18" width="56" height="30" rx="15" fill="#8c73ff" stroke="${INK}" stroke-width="4"/><path d="M18 26 V40 M11 33 H25" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="42" cy="28" r="4.5" fill="#ffd23f" stroke="${INK}" stroke-width="2.5"/><circle cx="50" cy="37" r="4.5" fill="#ff5f8f" stroke="${INK}" stroke-width="2.5"/></svg>`,
+  star: c => `<svg class="${c}" viewBox="0 0 100 100"><path d="M50 6 L62 38 L96 38 L68 58 L79 92 L50 72 L21 92 L32 58 L4 38 L38 38 Z" fill="#fff" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/></svg>`,
+  incog: `<svg viewBox="0 0 48 48"><path d="M7 25 H41" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M13 24 L16 10 C17 7 20 8 24 10 C28 8 31 7 32 10 L35 24 Z" fill="#8c73ff" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><circle cx="16" cy="35" r="6" fill="#fff" stroke="${INK}" stroke-width="3.5"/><circle cx="32" cy="35" r="6" fill="#fff" stroke="${INK}" stroke-width="3.5"/><path d="M22 35 Q24 33 26 35" fill="none" stroke="${INK}" stroke-width="3"/></svg>`,
+  board: `<svg viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="28" rx="3" fill="#4fd6a6" stroke="${INK}" stroke-width="3.5"/><path d="M11 17 H27 M11 24 H22" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M16 36 L12 44 M32 36 L36 44" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  lock: `<svg viewBox="0 0 36 36"><rect x="7" y="16" width="22" height="17" rx="4" fill="#ff5f8f" stroke="${INK}" stroke-width="3"/><path d="M11.5 16 V11 A6.5 6.5 0 0 1 24.5 11 V16" fill="none" stroke="${INK}" stroke-width="3"/><circle cx="18" cy="24" r="2.6" fill="${INK}"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24"><path d="M12 5 V19 M5 12 H19" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><path d="M12 5 V19 M5 12 H19" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>`,
+  gem: `<svg viewBox="0 0 64 64"><path d="M8 24 L20 8 H44 L56 24 L32 58 Z" fill="#8c73ff" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M8 24 H56 M20 8 L26 24 L32 58 L38 24 L44 8 M26 24 L32 8 L38 24" fill="none" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/></svg>`,
+  slash: `<path d="M8 42 L40 8" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M8 42 L40 8" stroke="#ff5f8f" stroke-width="4.5" stroke-linecap="round"/>`,
+  hand: `<svg viewBox="0 0 60 80"><path d="M20 40 V10 A6 6 0 0 1 32 10 V34 C32 30 41 30 41 35 C41 31 50 31 50 37 C50 33 57 34 57 40 V54 C57 64 50 70 41 70 H31 C26 70 22 67 19 63 L9 49 C6 45 11 40 15 43 L20 48 Z" fill="#ffd9b8" stroke="${INK}" stroke-width="3.6" stroke-linejoin="round"/><path d="M32 34 V42 M41 35 V43 M50 37 V44" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><path d="M23 10 Q26 7 29 10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><rect x="22" y="68" width="32" height="11" rx="3" fill="#8c73ff" stroke="${INK}" stroke-width="3.6"/></svg>`,
+}
+I.tag = `<svg viewBox="0 0 48 48"><rect x="5" y="12" width="38" height="26" rx="5" fill="#fff" stroke="${INK}" stroke-width="3.5"/><path d="M5 20 H43" stroke="${INK}" stroke-width="3.5"/><path d="M7 15 H41" stroke="#4da3ff" stroke-width="4"/><path d="M12 30 H34" stroke="#cfcbe6" stroke-width="4" stroke-linecap="round"/>${I.slash}</svg>`
+I.photo = `<svg viewBox="0 0 48 48"><rect x="5" y="10" width="38" height="30" rx="5" fill="#fff" stroke="${INK}" stroke-width="3.5"/><circle cx="17" cy="20" r="4" fill="#ffd23f" stroke="${INK}" stroke-width="2.5"/><path d="M9 36 L19 27 L27 33 L33 28 L40 35" fill="none" stroke="#4fd6a6" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>${I.slash}</svg>`
+
+const BTN = {
+  play: `<svg viewBox="0 0 24 24"><path d="M8 4.5 L19.5 12 L8 19.5 Z" fill="#fff" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/></svg>`,
+  pause: `<svg viewBox="0 0 24 24"><rect x="5.5" y="4.5" width="4.8" height="15" rx="1.6" fill="#fff" stroke="${INK}" stroke-width="2.4"/><rect x="13.7" y="4.5" width="4.8" height="15" rx="1.6" fill="#fff" stroke="${INK}" stroke-width="2.4"/></svg>`,
+  prev: `<svg viewBox="0 0 24 24"><path d="M19 5 L9.5 12 L19 19 Z" fill="#fff" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 5 V19" stroke="${INK}" stroke-width="3" stroke-linecap="round"/></svg>`,
+  next: `<svg viewBox="0 0 24 24"><path d="M5 5 L14.5 12 L5 19 Z" fill="#fff" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/><path d="M18 5 V19" stroke="${INK}" stroke-width="3" stroke-linecap="round"/></svg>`,
+  again: `<svg viewBox="0 0 24 24"><path d="M5.2 13 A7 7 0 1 0 7.6 6.6" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/><path d="M7.8 2.6 L7.4 6.9 L11.6 7.6" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  go: `<svg viewBox="0 0 24 24"><path d="M4.5 12 H18 M12.5 6 L18.5 12 L12.5 18" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  full: `<svg viewBox="0 0 24 24"><path d="M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+}
+const poster = (color, replay) => `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="${color}" stroke="${INK}" stroke-width="6"/>${replay
+  ? `<path d="M28 54 A23 23 0 1 0 35 33" fill="none" stroke="${INK}" stroke-width="15" stroke-linecap="round"/><path d="M28 54 A23 23 0 1 0 35 33" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M35 19 L34 35 L49 37" fill="none" stroke="${INK}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 19 L34 35 L49 37" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`
+  : `<path d="M38 28 L72 50 L38 72 Z" fill="#fff" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>`}</svg>`
+
+// A drawn QR code: only an illustration, it does not open anything
+function fakeQr() {
+  let seed = 11
+  const random = () => (seed = (seed * 9301 + 49297) % 233280) / 233280
+  const corner = (x, y) => x < 8 && y < 8 || x > 12 && y < 8 || x < 8 && y > 12
+  const cells = []
+  for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) if (!corner(x, y) && random() < .47) cells.push(`<rect x="${x + .08}" y="${y + .08}" width=".84" height=".84" rx=".25"/>`)
+  const finder = (x, y) => `<rect x="${x + .5}" y="${y + .5}" width="6" height="6" rx="1.3" fill="none" stroke="${INK}" stroke-width="1"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx=".7" fill="${INK}"/>`
+  return `<svg viewBox="-1 -1 23 23"><rect x="-1" y="-1" width="23" height="23" rx="2" fill="#fff"/><g fill="${INK}">${cells.join("")}</g>${finder(0, 0)}${finder(14, 0)}${finder(0, 14)}</svg>`
+}
+const QR = fakeQr()
+
+// The little game the Gemini creates in the videos
+const GAME = `<div class="g-in"><div class="g-stars">${I.star("s1")}${I.star("")}${I.star("")}</div><div class="g-q">8 + 5 = ?</div><div class="g-ans"><span class="g-b b12">12</span><span class="g-b b13">13</span><span class="g-b b15">15</span></div><div class="g-say"><span class="g-msg bad">${I.cross}Errou!</span><span class="g-msg good">${I.check}Acertou!</span></div></div>`
+const PROMPT = [["p", "P", "Você é professor(a) do 2º ano. "], ["t", "T", "Crie um jogo de somas até 20 "], ["c", "C", "para crianças de 7 anos, no celular. "], ["f", "F", "Use botões grandes, 3 fases e estrelas no final."]]
+const FIX = [["", "Quando eu "], ["hl", "toco no 13"], ["", ", acontece "], ["hl", "“Errou!”"], ["", ", mas deveria "], ["hl", "ganhar uma estrela"], ["", ". Conserte só isso."]]
+const typedPrompt = PROMPT.map(([c, l, text]) => `<span class="pt ${c}" data-l="${l}" data-text="${text}"></span>`).join("")
+const shownPrompt = PROMPT.map(([c, l, text]) => `<span class="pt ${c}" data-l="${l}">${text}</span>`).join("")
+const typedFix = FIX.map(([c, text]) => `<span class="${c}" data-text="${text}"></span>`).join("")
+const shownFix = FIX.map(([c, text]) => `<span class="${c}">${text}</span>`).join("")
+const typed = (key, text) => `<span class="typed" data-key="${key}"><span data-text="${text}"></span></span>`
+const TOP = `<div class="s-bar"><span class="s-menu">${I.menu}</span><b class="s-brand">Gemini</b><span class="s-av">${I.avatar}</span></div>`
+const HANDS = `<div class="ripple"></div><div class="hand">${I.hand}</div>`
+const MINI = `<div class="mini">${GAME}</div>`
+
+const SCENES = {
+  app: `${TOP}
+<div class="s-body">
+  <div class="s-chat">
+    <p class="s-hello">Olá, professor(a)!</p>
+    <div class="s-msgs">
+      <div class="s-you m1">${shownPrompt}</div>
+      <div class="s-ai m1r"><span class="sk"></span><span class="sk w7"></span><div class="s-doc">${I.game}<span><b>Jogo das somas</b><small>Canvas</small></span></div></div>
+      <div class="s-you m2">${shownFix}</div>
+      <div class="s-ai m2r"><span class="sk w8"></span><div class="s-doc">${I.game}<span><b>Jogo das somas</b><small>Canvas</small></span></div></div>
+      <div class="s-think"><i></i><i></i><i></i></div>
+    </div>
+    <div class="s-comp">
+      <div class="s-tmenu"><div class="s-item"><i></i><b></b></div><div class="s-item canvas">${I.canvas}<span>Canvas</span></div><div class="s-item"><i></i><b class="w6"></b></div></div>
+      <div class="s-field"><span class="typed" data-key="p1">${typedPrompt}</span><span class="typed" data-key="fix">${typedFix}</span><span class="s-ph">Escreva o seu pedido</span></div>
+      <div class="s-row"><span class="s-pill s-tools">${I.sliders}<span>Ferramentas</span></span><span class="s-pill s-chip">${I.canvas}<span>Canvas</span></span><span class="s-send">${I.up}</span></div>
+    </div>
+  </div>
+  <div class="s-panel">
+    <div class="s-pbar"><b class="s-ptitle">Jogo das somas</b><span class="s-pill s-share">${I.share}<span>Compartilhar</span></span></div>
+    <div class="s-game">${GAME}<div class="g-load"><div><i></i><i></i><i></i></div></div></div>
+    <div class="s-pop"><p class="pop-a">Crie um link para a turma abrir o jogo.</p><p class="pop-b">Qualquer pessoa com o link abre o jogo.</p><div class="s-link">${I.link}<span>https://</span><i></i></div><span class="s-act"><span class="a1">Criar link público</span><span class="a2">Copiar link</span><span class="a3">${I.check}Copiado</span></span></div>
+  </div>
+</div>
+<div class="v v-phone">
+  <div class="ph"><i class="ph-notch"></i><div class="ph-top">${I.incog}<span class="ph-url"><span class="u0">Cole o link</span><span class="u1">${I.link}https://<i></i></span></span></div><div class="ph-screen"><div class="ph-blank">${I.incog}<b>Janela anônima</b></div>${MINI}</div></div>
+  <div class="ph-note"><b>Teste no celular</b><p>Na janela anônima, você vê o jogo do jeito que a turma vai ver.</p><span class="ok-badge">${I.check}Abriu!</span></div>
+</div>
+<div class="v v-class">
+  <div class="cl-win"><div class="cl-bar">${I.board}<b>Google Classroom</b></div><div class="cl-body"><div class="cl-head"><b>Turma do 2º ano</b></div><div class="cl-post"><div class="cl-top">${I.avatar}<span>Jogo de hoje: somas até 20.</span></div><span class="cl-att">${I.link}<b>Jogo das somas</b></span><div class="cl-foot"><span class="s-pill cl-btn"><span class="b1">Postar</span><span class="b2">${I.check}Postado</span></span></div></div></div></div>
+</div>
+<div class="v v-qr">
+  <div class="qr-board"><b>Jogo das somas</b><div class="qr">${QR}</div><span>Aponte a câmera do celular</span></div>
+  <div class="ph qr-ph"><i class="ph-notch"></i><div class="ph-screen"><div class="qr-cam"><div class="qr">${QR}</div><i class="scan"></i></div>${MINI}</div></div>
+</div>
+<div class="s-care"><div class="care-card">${I.lock}<div><b>O link é público</b><p>Nada de nomes ou fotos das crianças no jogo.</p><div class="care-x">${I.tag}${I.photo}</div></div></div></div>
+${HANDS}`,
+
+  gem: `${TOP}
+<div class="s-body">
+  <div class="gv gv-home"><p class="s-hello">Olá, professor(a)!</p><div class="s-comp"><div class="s-field"><span class="s-ph">Escreva o seu pedido</span></div><div class="s-row"><span class="s-pill s-tools">${I.sliders}<span>Ferramentas</span></span><span class="s-send">${I.up}</span></div></div></div>
+  <div class="gv gv-list"><div class="gl-top"><b class="gl-h">Gems</b><span class="s-pill gl-new">${I.plus}<span>Novo Gem</span></span></div><div class="gl-cards">${`<div class="gl-card">${I.gem}<span class="sk"></span><span class="sk w6"></span></div>`.repeat(3)}</div></div>
+  <div class="gv gv-edit">
+    <div class="ge-form"><b class="ge-h">Novo Gem</b>
+      <span class="ge-l">Nome</span><div class="ge-box ge-name">${typed("name", "Assistente do 2º ano")}<span class="s-ph">Dê um nome</span></div>
+      <span class="ge-l">Instruções</span><div class="ge-box ge-ins"><div class="ge-text">Você é meu assistente para planejar aulas. Eu sou professor(a) de <span class="bw bw1"><span class="br">[componente]</span><span class="fl">${typed("f1", "Matemática")}</span></span> do <span class="bw bw2"><span class="br">[ano]</span><span class="fl">${typed("f2", "2º ano")}</span></span> do Ensino Fundamental, numa escola pública.<span class="ge-sk"><i></i><i></i><i class="w8"></i><i></i><i class="w5"></i></span></div><span class="s-ph">Escreva ou cole as instruções</span></div>
+    </div>
+    <span class="s-pill ge-save"><span class="b1">Salvar</span><span class="b2">${I.check}Salvo</span></span>
+    <div class="ge-test">
+      <div class="s-msgs"><div class="s-you ge-q">Faça um plano de uma aula de 50 minutos sobre adição.</div><div class="s-ai ge-a"><div class="row"><i></i><i></i></div><div class="row"><i></i><i></i></div><div class="row"><i></i><i></i></div><span class="sk w8"></span></div><div class="s-think"><i></i><i></i><i></i></div></div>
+      <div class="s-comp ge-comp"><div class="s-field ge-field">${typed("q", "Faça um plano de uma aula de 50 minutos sobre adição.")}<span class="s-ph">Teste o seu Gem</span></div><span class="s-send ge-send">${I.up}</span></div>
+    </div>
+  </div>
+  <div class="side-scrim"></div>
+  <div class="side"><div class="side-gems">${I.gem}<span>Gems</span></div><span class="sk"></span><span class="sk w8"></span><span class="sk w6"></span><span class="sk w7"></span></div>
+</div>
+<div class="s-care"><div class="care-two"><b>Nas instruções do Gem</b><div class="yes">${I.check}<span>A etapa e o jeito da turma</span></div><div class="no">${I.cross}<span>Nunca dados das crianças</span></div></div></div>
+${HANDS}`,
+}
+
+// The three videos. Each step has a caption, a length in seconds and what happens in it:
+// move the finger to a button, tap it, change the screen, or type a text little by little
+const VIDEOS = {
+  canvas: {
+    n: 1, title: "Abrir o Canvas e pedir um jogo", color: "#4fd6a6", light: "#c9f5e3", scene: "app",
+    init: { view: "app", game: "q" }, start: [82, 58],
+    steps: [
+      { say: "Na caixa de mensagem, abra as <b>Ferramentas</b>.", dur: 3.6, acts: [["move", .4, ".s-tools"], ["tap", 1.5, ".s-tools"], ["set", 1.65, { tools: true }]] },
+      { say: "Escolha <b>Canvas</b>.", dur: 3.2, acts: [["move", .3, ".s-item.canvas"], ["tap", 1.4, ".s-item.canvas"], ["set", 1.6, { tools: false, canvas: true }], ["move", 1.9, ".s-chip", .6]] },
+      { say: "Escreva o pedido com as quatro partes.", extra: "ptcf", dur: 6.4, acts: [["move", .2, [".s-field", .15, .5]], ["tap", .9, ".s-comp"], ["move", 1.2, [91, 42], .6], ["type", 1.3, 5.9, "p1"]] },
+      { say: "Toque na setinha para enviar.", dur: 3.4, acts: [["move", .2, ".s-send"], ["tap", 1.2, ".s-send"], ["clear", 1.35, "p1"], ["set", 1.35, { sent1: true, think: true }]] },
+      { say: "O jogo aparece pronto, ao lado da conversa.", dur: 4.2, acts: [["set", .5, { think: false, reply1: true, split: true }], ["move", 1.4, [75, 28], .9]] },
+      { say: "Jogue como se fosse uma criança e veja o que não funcionou.", dur: 4.6, acts: [["move", .2, [".s-game .b13", .5, .7]], ["tap", 1.3, ".s-game .b13"], ["set", 1.45, { game: "bug" }], ["move", 2.3, [94, 60], .7]] },
+      { say: "Peça o ajuste com esta frase:", extra: "frase", dur: 6.8, acts: [["move", .2, [".s-field", .2, .5]], ["tap", .9, ".s-comp"], ["move", 1.2, [52, 24], .6], ["type", 1.3, 6.3, "fix"]] },
+      { say: "Envie e jogue de novo para conferir.", dur: 5.4, acts: [["move", .2, ".s-send"], ["tap", 1, ".s-send"], ["clear", 1.15, "fix"], ["set", 1.15, { sent2: true, think: true, gen: true, game: "q" }], ["set", 2.3, { think: false, reply2: true, gen: false }], ["move", 2.5, [".s-game .b13", .5, .7]], ["tap", 3.6, ".s-game .b13"], ["set", 3.75, { game: "ok" }], ["move", 4.3, [94, 60], .7]] },
+    ],
+  },
+  compartilhar: {
+    n: 2, title: "Compartilhar o jogo com a turma", color: "#ff8a3d", light: "#ffdcc4", scene: "app",
+    init: { view: "app", split: true, sent1: true, reply1: true, canvas: true, game: "q" }, start: [40, 62],
+    steps: [
+      { say: "Com o jogo aberto, toque em <b>Compartilhar</b>.", dur: 3.6, acts: [["move", .3, ".s-share"], ["tap", 1.4, ".s-share"], ["set", 1.55, { share: true }]] },
+      { say: "Crie o link público.", dur: 3.2, acts: [["move", .2, ".s-act"], ["tap", 1.2, ".s-act"], ["set", 1.35, { link: true }]] },
+      { say: "Copie o link.", dur: 3, acts: [["move", .2, ".s-act"], ["tap", 1.1, ".s-act"], ["set", 1.25, { copied: true }]] },
+      { say: "Teste: abra o link no celular, numa janela anônima.", dur: 5.4, acts: [["set", .3, { view: "phone", share: false }], ["move", .5, ".ph-url"], ["tap", 1.6, ".ph-url"], ["set", 1.75, { url: true }], ["move", 2.3, [36, 84], .6], ["set", 2.6, { phgame: true }], ["set", 3.4, { phok: true }]] },
+      { say: "Abriu? Então mande o link pelo Google Classroom…", dur: 4.4, acts: [["set", .3, { view: "class" }], ["move", .6, ".cl-btn"], ["set", 1, { attach: true }], ["tap", 2.1, ".cl-btn"], ["set", 2.25, { posted: true }]] },
+      { say: "…ou mostre um QR code para a turma.", dur: 4.6, acts: [["set", .2, { view: "qr", hidehand: true }], ["set", 1, { qr: "cam" }], ["set", 2.6, { qr: "open" }]] },
+      { say: "O link é público: nada de nomes ou fotos das crianças no jogo.", dur: 5.2, acts: [["set", .3, { care: true }]] },
+    ],
+  },
+  gem: {
+    n: 3, title: "Criar um Gem", color: "#8c73ff", light: "#e2dbff", scene: "gem",
+    init: { gv: "home" }, start: [55, 55],
+    steps: [
+      { say: "Abra o menu lateral.", dur: 3.2, acts: [["move", .3, ".s-menu"], ["tap", 1.3, ".s-menu"], ["set", 1.45, { side: true }]] },
+      { say: "Toque em <b>Gems</b>.", dur: 3, key: 1.3, acts: [["move", .2, ".side-gems"], ["tap", 1.2, ".side-gems"], ["set", 1.4, { gv: "list", side: false }]] },
+      { say: "Toque em <b>Novo Gem</b>.", dur: 3, key: 1.3, acts: [["move", .2, ".gl-new"], ["tap", 1.2, ".gl-new"], ["set", 1.4, { gv: "edit" }]] },
+      { say: "Dê um nome, como Assistente do 2º ano.", dur: 3.8, acts: [["move", .2, [".ge-name", .85, .6]], ["tap", .9, ".ge-name"], ["type", 1.1, 3.2, "name"]] },
+      { say: "Cole as instruções da página Gems prontos.", dur: 3.6, acts: [["move", .2, [".ge-ins", .8, .35]], ["tap", 1, ".ge-ins"], ["set", 1.25, { paste: true }]] },
+      { say: "Troque o que está entre <mark>[colchetes]</mark>.", dur: 5.4, acts: [["move", .2, [".bw1", .5, .9]], ["tap", 1, ".bw1"], ["set", 1.15, { f1: true }], ["type", 1.2, 2.2, "f1"], ["move", 2.5, [".bw2", .5, .9]], ["tap", 3.3, ".bw2"], ["set", 3.45, { f2: true }], ["type", 3.5, 4.2, "f2"]] },
+      { say: "Teste com um pedido.", dur: 5.2, acts: [["move", .2, [".ge-field", .85, .5]], ["tap", .9, ".ge-comp"], ["type", 1, 3, "q"], ["move", 3, ".ge-send", .5], ["tap", 3.6, ".ge-send"], ["clear", 3.75, "q"], ["set", 3.75, { asked: true, think2: true }], ["set", 4.5, { think2: false, answered: true }]] },
+      { say: "Ficou bom? Toque em <b>Salvar</b>.", dur: 3.4, acts: [["move", .2, ".ge-save"], ["tap", 1.3, ".ge-save"], ["set", 1.45, { saved: true }]] },
+      { say: "Nas instruções vão a etapa e o jeito da turma. Nunca dados das crianças.", dur: 5.4, acts: [["set", .3, { care: true, hidehand: true }]] },
+    ],
+  },
+}
+const ORDER = ["canvas", "compartilhar", "gem"]
+const FRASE = "Quando eu <b>[o que fiz]</b>, acontece <b>[o que aconteceu]</b>, mas deveria <b>[o que esperava]</b>. Conserte só isso."
+const PARTS = [["P", "Papel", "#4da3ff"], ["T", "Tarefa", "#4fd6a6"], ["C", "Contexto", "#ffd23f"], ["F", "Formato", "#ff8a3d"]]
+const strip = html => html.replace(/<[^>]+>/g, "")
+const plain = step => strip(step.say) + (step.extra === "frase" ? " " + strip(FRASE) : step.extra === "ptcf" ? " Papel, Tarefa, Contexto e Formato." : "")
+const extra = step => step.extra === "ptcf" ? `<span class="cap-parts">${PARTS.map(([l, name, c]) => `<span style="--c: ${c}"><i>${l}</i>${name}</span>`).join("")}</span>`
+  : step.extra === "frase" ? `<span class="cap-frase">${FRASE}</span>` : ""
+const caption = (video, step, index) => `<span class="cap-n">Passo ${index + 1} de ${video.steps.length}</span><p class="cap-t">${step.say}</p>${extra(step)}`
+
+for (const video of Object.values(VIDEOS)) {
+  video.keys = new Set(["hidehand", ...Object.keys(video.init)])
+  for (const step of video.steps) {
+    step.acts.sort((a, b) => a[1] - b[1])
+    step.acts.filter(act => act[0] === "set").forEach(act => Object.keys(act[2]).forEach(key => video.keys.add(key)))
+  }
+}
+
+// What the screen looks like at a given moment: replaying every step up to that time
+const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2
+function compute(video, stepIndex, time) {
+  const state = { flags: { ...video.init }, typing: {}, from: video.start, to: video.start, p: 1, press: null, age: null }
+  video.steps.forEach((step, index) => {
+    if (index > stepIndex) return
+    const now = index < stepIndex ? Infinity : time
+    for (const [kind, at, a, b] of step.acts) {
+      if (at > now) continue
+      const age = now - at
+      if (kind === "set") Object.assign(state.flags, a)
+      else if (kind === "move") Object.assign(state, { from: state.to, to: a, p: ease(Math.min(1, age / (b ?? .8))) })
+      else if (kind === "tap") Object.assign(state, age < .7 ? { press: a, age } : { press: null, age: null })
+      else if (kind === "type") state.typing[b] = Math.min(1, age / Math.max(.001, a - at))
+      else if (kind === "clear") state.typing[a] = 0
+    }
+  })
+  return state
+}
+
+// Where an element is on the screen, in percent, so the finger can go there at any size
+const spots = new WeakMap()
+function spot(scene, target) {
+  if (typeof target[0] === "number") return target
+  const [selector, fx = .5, fy = .5] = Array.isArray(target) ? target : [target]
+  const key = selector + fx + fy
+  if (!spots.has(scene)) spots.set(scene, new Map())
+  const known = spots.get(scene)
+  const element = scene.querySelector(selector)
+  if (element && element.offsetParent && element.offsetWidth) {
+    let x = element.offsetWidth * fx, y = element.offsetHeight * fy, node = element
+    while (node && node !== scene) { x += node.offsetLeft; y += node.offsetTop; node = node.offsetParent }
+    if (node === scene) known.set(key, [x / scene.offsetWidth * 100, y / scene.offsetHeight * 100])
+  }
+  return known.get(key) ?? [50, 50]
+}
+
+function paint(scene, video, state) {
+  for (const key of video.keys) {
+    const value = state.flags[key]
+    if (value === undefined || value === false) scene.removeAttribute("data-" + key)
+    else scene.setAttribute("data-" + key, value === true ? "" : value)
+  }
+  scene.querySelectorAll(".typed").forEach(box => {
+    const amount = state.typing[box.dataset.key] ?? 0
+    const parts = [...box.children]
+    let left = Math.round(parts.reduce((sum, part) => sum + part.dataset.text.length, 0) * amount)
+    for (const part of parts) {
+      const shown = part.dataset.text.slice(0, Math.max(0, left))
+      if (part.textContent !== shown) part.textContent = shown
+      left -= part.dataset.text.length
+    }
+    box.classList.toggle("caret", amount > 0 && amount < 1)
+  })
+  scene.querySelectorAll(".s-field, .ge-box").forEach(field => field.classList.toggle("has", [...field.querySelectorAll(".typed")].some(box => box.textContent)))
+  scene.querySelectorAll(".s-comp").forEach(comp => comp.classList.toggle("has", Boolean(comp.querySelector(".s-field.has"))))
+  scene.querySelectorAll(".pressed").forEach(element => element.classList.remove("pressed"))
+  const down = state.press && state.age < .4
+  if (down) scene.querySelector(state.press)?.classList.add("pressed")
+  const a = spot(scene, state.from), b = spot(scene, state.to)
+  const x = a[0] + (b[0] - a[0]) * state.p, y = a[1] + (b[1] - a[1]) * state.p
+  const hand = scene.querySelector(".hand"), ripple = scene.querySelector(".ripple")
+  hand.style.left = ripple.style.left = x + "%"
+  hand.style.top = ripple.style.top = y + "%"
+  hand.classList.toggle("down", Boolean(down))
+  const wave = state.age === null ? 1 : state.age / .7
+  ripple.style.opacity = wave < 1 ? 1 - wave : 0
+  ripple.style.transform = `scale(${.3 + wave * 1.3})`
+}
+
+// The player
+const $ = id => document.getElementById(id)
+const params = new URLSearchParams(location.search)
+const calm = matchMedia("(prefers-reduced-motion: reduce)")
+let video, still = false, S = {}, mode = ""
+
+function select(id) {
+  stop()
+  video = VIDEOS[id]
+  video.id = id
+  $("player").style.setProperty("--c", video.color)
+  $("player").style.setProperty("--light", video.light)
+  $("player-n").textContent = video.n
+  $("player-name").textContent = video.title
+  document.querySelectorAll(".tab").forEach(tab => tab.setAttribute("aria-current", tab.dataset.id === id ? "true" : "false"))
+  $("list").innerHTML = video.steps.map(step => `<li>${step.say}${step.extra === "frase" ? " " + strip(FRASE) : step.extra === "ptcf" ? " Papel, Tarefa, Contexto e Formato." : ""}</li>`).join("")
+  S = { step: 0, t: 0, playing: false, fresh: true, ended: false, stopAt: null }
+  mode = ""
+  if (still) return drawStill()
+  $("caps").innerHTML = video.steps.map((step, index) => `<div class="cap">${caption(video, step, index)}</div>`).join("")
+  $("bar").innerHTML = video.steps.map((step, index) => `<button class="seg" type="button" data-i="${index}" aria-label="Passo ${index + 1}: ${plain(step)}"><span><i></i></span></button>`).join("")
+  const scene = $("scene")
+  for (const attribute of [...scene.attributes]) if (attribute.name.startsWith("data-")) scene.removeAttribute(attribute.name)
+  scene.innerHTML = SCENES[video.scene]
+  draw()
+  $("live").textContent = `${video.title}. ${video.steps.length} passos. Toque em Tocar para começar.`
+}
+
+function drawStill() {
+  $("frames").innerHTML = video.steps.map((step, index) => `<figure class="frame"><figcaption>${caption(video, step, index)}</figcaption><div class="stage" aria-hidden="true"><div class="scene"></div></div></figure>`).join("")
+  paintStill()
+}
+function paintStill() {
+  $("frames").querySelectorAll(".scene").forEach((scene, index) => {
+    if (!scene.firstChild) scene.innerHTML = SCENES[video.scene]
+    const step = video.steps[index]
+    paint(scene, video, compute(video, index, step.key ?? step.dur))
+  })
+}
+
+function draw() {
+  const step = video.steps[S.step]
+  paint($("scene"), video, compute(video, S.step, S.t))
+  document.querySelectorAll("#caps .cap").forEach((cap, index) => cap.classList.toggle("on", index === S.step))
+  document.querySelectorAll("#bar .seg").forEach((seg, index) => {
+    seg.firstChild.firstChild.style.width = (index < S.step ? 100 : index > S.step ? 0 : Math.min(1, S.t / step.dur) * 100) + "%"
+    if (index === S.step) seg.setAttribute("aria-current", "step")
+    else seg.removeAttribute("aria-current")
+  })
+  const now = [S.playing, S.ended, S.fresh].join()
+  if (now === mode) return
+  mode = now
+  const play = $("play")
+  play.querySelector(".r").innerHTML = S.playing ? BTN.pause : S.ended ? BTN.again : BTN.play
+  play.querySelector(".lbl").textContent = S.playing ? "Pausar" : S.ended ? "Ver de novo" : "Tocar"
+  const after = ORDER[ORDER.indexOf(video.id) + 1]
+  const next = $("next")
+  next.querySelector(".r").innerHTML = S.ended ? BTN.go : BTN.next
+  next.querySelector(".lbl").textContent = S.ended ? (after ? "Próximo vídeo" : "Gems prontos") : "Avançar"
+  next.setAttribute("aria-label", S.ended ? (after ? `Próximo vídeo: ${VIDEOS[after].title}` : "Gems prontos: abrir a página") : "Avançar um passo")
+  $("poster").innerHTML = poster(video.color, S.ended)
+  $("poster").style.opacity = S.fresh || S.ended ? 1 : 0
+}
+
+function announce() {
+  $("live").textContent = `Passo ${S.step + 1} de ${video.steps.length}. ${plain(video.steps[S.step])}`
+}
+
+function tick(now) {
+  if (!S.playing) return
+  S.t += Math.min(.1, (now - S.last) / 1000)
+  S.last = now
+  const steps = video.steps
+  while (S.t >= steps[S.step].dur) {
+    const last = S.step + 1 >= steps.length
+    if (S.stopAt === S.step || last) {
+      S.t = steps[S.step].dur
+      S.ended = last
+      S.playing = false
+      break
+    }
+    S.t -= steps[S.step].dur
+    S.step++
+    announce()
+  }
+  draw()
+  if (S.playing) S.frame = requestAnimationFrame(tick)
+}
+function run(stopAt = null) {
+  S.playing = true
+  S.fresh = false
+  S.stopAt = stopAt
+  S.last = performance.now()
+  cancelAnimationFrame(S.frame)
+  S.frame = requestAnimationFrame(tick)
+  draw()
+}
+function stop() {
+  if (!S.playing) return
+  S.playing = false
+  cancelAnimationFrame(S.frame)
+  draw()
+}
+function play() {
+  if (S.playing) return stop()
+  const steps = video.steps
+  if (S.ended || (S.t >= steps[S.step].dur && S.step + 1 >= steps.length)) Object.assign(S, { step: 0, t: 0, ended: false })
+  else if (S.t >= steps[S.step].dur) Object.assign(S, { step: S.step + 1, t: 0 })
+  if (S.t === 0) announce()
+  run()
+}
+// Jumping to a step: while playing the video goes on; while paused only that step plays
+function goTo(index) {
+  const playing = S.playing
+  Object.assign(S, { step: Math.max(0, Math.min(video.steps.length - 1, index)), t: 0, ended: false })
+  announce()
+  run(playing ? null : S.step)
+}
+
+$("play").addEventListener("click", play)
+$("stage").addEventListener("click", play)
+$("prev").addEventListener("click", () => goTo(S.step - 1))
+$("next").addEventListener("click", () => {
+  if (!S.ended) return goTo(S.step + 1)
+  const after = ORDER[ORDER.indexOf(video.id) + 1]
+  if (after) location.hash = after
+  else location.href = "gems.html"
+})
+$("again").addEventListener("click", () => {
+  stop()
+  Object.assign(S, { step: 0, t: 0, ended: false })
+  announce()
+  run()
+})
+$("bar").addEventListener("click", event => {
+  const seg = event.target.closest(".seg")
+  if (seg) goTo(Number(seg.dataset.i))
+})
+$("player").addEventListener("keydown", event => {
+  if (still || event.altKey || event.ctrlKey || event.metaKey) return
+  if (event.key === "ArrowRight") { event.preventDefault(); goTo(S.step + 1) }
+  if (event.key === "ArrowLeft") { event.preventDefault(); goTo(S.step - 1) }
+})
+
+// Full screen, for the projector
+if (document.fullscreenEnabled) {
+  const full = $("full")
+  full.hidden = false
+  full.querySelector(".r").innerHTML = BTN.full
+  full.addEventListener("click", () => document.fullscreenElement ? document.exitFullscreen() : $("player").requestFullscreen())
+  document.addEventListener("fullscreenchange", () => { full.querySelector(".lbl").textContent = document.fullscreenElement ? "Sair" : "Tela cheia" })
+}
+$("prev").querySelector(".r").innerHTML = BTN.prev
+$("again").querySelector(".r").innerHTML = BTN.again
+
+// Without the finger animation the steps are shown still, one under the other
+function setMode() {
+  still = calm.matches || params.has("parado")
+  $("live-box").hidden = still
+  $("frames").hidden = !still
+  $("list-box").hidden = still
+  select(VIDEOS[location.hash.slice(1)] ? location.hash.slice(1) : video?.id ?? "canvas")
+}
+calm.addEventListener?.("change", setMode)
+addEventListener("hashchange", () => select(VIDEOS[location.hash.slice(1)] ? location.hash.slice(1) : "canvas"))
+if (!CSS.supports("width", "1cqw")) {
+  const fit = new ResizeObserver(entries => entries.forEach(entry => { const scene = entry.target.querySelector(".scene"); if (scene) scene.style.fontSize = entry.contentRect.width / 60 + "px" }))
+  new MutationObserver(() => document.querySelectorAll(".stage").forEach(stage => fit.observe(stage))).observe(document.body, { childList: true, subtree: true })
+  document.querySelectorAll(".stage").forEach(stage => fit.observe(stage))
+}
+setMode()
+
+// A step can be opened from the address, for example passo-a-passo.html?passo=3#canvas
+if (params.has("passo") && !still) {
+  const index = Math.max(0, Math.min(video.steps.length - 1, Number(params.get("passo")) - 1 || 0))
+  const step = video.steps[index]
+  Object.assign(S, { step: index, t: params.has("t") ? Math.min(step.dur, Number(params.get("t"))) : step.dur, fresh: false })
+  draw()
+}
+if (VIDEOS[location.hash.slice(1)] && $("player").getBoundingClientRect().bottom > innerHeight) document.querySelector(".tabs").scrollIntoView()
+document.fonts?.ready.then(() => still ? paintStill() : draw())
+</script>
+</body>
+</html>

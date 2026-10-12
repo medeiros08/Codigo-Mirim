@@ -36,6 +36,8 @@
 ## Oficina de Prompts para professores
 
 - **[Oficina de Prompts](https://medeiros08.github.io/Codigo-Mirim/oficina/)**: a formação em quatro encontros.
+- **[Curso online](https://medeiros08.github.io/Codigo-Mirim/curso/)**: a oficina para fazer sozinho, no seu ritmo, com teste final e comprovante.
+- **[Passo a passo animado](https://medeiros08.github.io/Codigo-Mirim/passo-a-passo/)**: abrir o Canvas, compartilhar o jogo e criar um Gem, em vídeos curtos.
 - **[Jogo do Prompt](https://medeiros08.github.io/Codigo-Mirim/jogo-do-prompt/)**: monte o pedido com as quatro peças e veja o que o Gemini faria.
 - **[Construtor de prompts](https://medeiros08.github.io/Codigo-Mirim/prompt/)**: monte um pedido pronto para colar no Gemini.
 - **[Biblioteca de prompts](https://medeiros08.github.io/Codigo-Mirim/biblioteca/)**: prompts de partida por etapa e tipo de material.
@@ -48,8 +50,11 @@
 - **[Roteiro do formador](https://medeiros08.github.io/Codigo-Mirim/formador/)**: os quatro encontros passo a passo, em PDF.
 - **[Slides dos encontros](https://medeiros08.github.io/Codigo-Mirim/encontros/)**: um para cada encontro, para o projetor.
 - **[Caderno do participante](https://medeiros08.github.io/Codigo-Mirim/caderno/)**: cinco folhas de prática, em PDF.
-- **[Avaliação do encontro](https://medeiros08.github.io/Codigo-Mirim/avaliacao/)**: folha anônima, em PDF, ou perguntas para o Google Forms.
+- **[Avaliação do encontro](https://medeiros08.github.io/Codigo-Mirim/avaliacao/)**: folha anônima, em PDF.
+- **[Avaliação pelo celular](https://medeiros08.github.io/Codigo-Mirim/avaliar/)**: o mesmo formulário, anônimo, no Google Forms.
 - **[Certificado da oficina](https://medeiros08.github.io/Codigo-Mirim/certificado-oficina/)**: escreva os nomes dos professores e imprima.
+- **[Cartaz-convite](https://medeiros08.github.io/Codigo-Mirim/convite/)**: para pendurar na escola, em PDF.
+- **[Proposta para a escola](https://medeiros08.github.io/Codigo-Mirim/proposta/)**: uma página para a direção ou a Secretaria, em PDF.
 
 Todos esses links são curtos e podem ser ditados ou escritos no quadro, por exemplo **medeiros08.github.io/Codigo-Mirim/ninja**.
 

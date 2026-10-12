@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Página não encontrada · Código Mirim</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#5fbcff">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='20' width='72' height='60' rx='16' fill='%234da3ff' stroke='%231d2a44' stroke-width='6'/><circle cx='36' cy='48' r='9' fill='%23fff'/><circle cx='64' cy='48' r='9' fill='%23fff'/></svg>">
+<style>
+  :root {
+    --sky1: #5fbcff; --sky2: #cdeeff; --hill: #8ddf6a; --hill2: #6cc653;
+    --ink: #2f2a4a; --soft: #5d5880;
+    --blue: #4da3ff; --pink: #ff5f8f; --mint: #4fd6a6; --orange: #ff8a3d; --purple: #a08bff; --yellow: #ffd23f;
+    --font: "Fredoka", "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent }
+  [hidden] { display: none !important }
+  body { margin: 0; min-height: 100vh; background: var(--sky2); color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.4 }
+  a { color: inherit }
+  .g { transform-box: fill-box; transform-origin: center }
+
+  .sky { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 78%) }
+  .cloud { position: absolute; background: #fff; border-radius: 999px; opacity: .92; animation: drift 46s linear infinite }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50% }
+  .cloud::before { width: 55%; height: 160%; left: 15%; bottom: 20% }
+  .cloud::after { width: 40%; height: 130%; right: 12%; bottom: 25% }
+  .c1 { width: 130px; height: 36px; top: 9%; animation-delay: -8s }
+  .c2 { width: 92px; height: 26px; top: 40%; animation-duration: 60s; animation-delay: -30s }
+  @keyframes drift { from { transform: translateX(-30vw) } to { transform: translateX(130vw) } }
+  .hills { position: absolute; left: 0; right: 0; bottom: 0; height: 17vh }
+  .hills::before, .hills::after { content: ""; position: absolute; bottom: -40%; border-radius: 50% }
+  .hills::before { left: -20%; width: 90%; height: 140%; background: var(--hill) }
+  .hills::after { right: -25%; width: 95%; height: 120%; background: var(--hill2) }
+
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: max(18px, env(safe-area-inset-top)) 16px 40px; text-align: center }
+  .brand { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 6px; padding: 3px 16px 3px 8px; background: #fff; border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 4px 0 var(--ink); font-size: 19px; font-weight: 700; text-decoration: none; transform: rotate(-2deg) }
+  .brand svg { width: 1.6em; height: 1.6em; flex: none }
+  .brand .b1 { color: #2470c4 } .brand .b2 { color: #c92a62 }
+
+  .lost { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 14px auto 0 }
+  .bot { width: clamp(96px, 26vw, 140px); flex: none; overflow: visible }
+  .bot-body { animation: look 3.2s ease-in-out infinite }
+  @keyframes look { 0%, 100% { transform: rotate(0) } 30% { transform: rotate(-7deg) } 60% { transform: rotate(6deg) } }
+  .q { animation: bob 1.6s ease-in-out infinite }
+  @keyframes bob { 50% { transform: translateY(-6px) } }
+  h1 { margin: 0; font-size: clamp(36px, 9vw, 60px); font-weight: 700; line-height: 1.05; color: var(--yellow); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 0 5px 0 var(--ink); text-align: left }
+  .typed { display: inline-block; max-width: 100%; margin: 14px 0 0; padding: 6px 16px; background: #fff; border: 3px dashed var(--ink); border-radius: 14px; font-weight: 600; overflow-wrap: anywhere }
+  .typed b { color: #c92a62 }
+
+  .card { margin: 26px auto 0; padding: 20px; background: #fff; border: 4px solid var(--ink); border-radius: 26px; box-shadow: 0 7px 0 rgba(47, 42, 74, .25); text-align: left }
+  .card h2 { margin: 0 0 12px; font-size: 24px }
+  .best { display: grid; gap: 12px }
+  .go { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--light); border: 3px solid var(--ink); border-radius: 18px; box-shadow: 0 5px 0 var(--ink); text-decoration: none; transition: transform .1s, box-shadow .1s }
+  .go:hover, .go:focus-visible { transform: translateY(-2px); box-shadow: 0 7px 0 var(--ink) }
+  .go:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink) }
+  .go .dot { width: 18px; height: 18px; flex: none; background: var(--c); border: 3px solid var(--ink); border-radius: 50% }
+  .go strong { display: block; font-size: 20px }
+  .go small { display: block; font-size: 15px; font-weight: 500; overflow-wrap: anywhere }
+  .go small b { color: #c92a62 }
+  .soon { margin: 10px 0 0; font-weight: 600 }
+
+  label.find { display: block; font-weight: 700; margin-bottom: 8px }
+  input { width: 100%; padding: 12px 16px; border: 3px solid var(--ink); border-radius: 16px; font: 500 18px var(--font); color: var(--ink) }
+  input:focus-visible, a:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px }
+  .group { margin-top: 16px }
+  .group h3 { margin: 0 0 8px; font-size: 18px }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none }
+  .pills a { display: inline-flex; flex-direction: column; padding: 4px 14px; background: var(--light); border: 3px solid var(--ink); border-radius: 16px; text-decoration: none; font-weight: 700; line-height: 1.2 }
+  .pills a small { font-weight: 500; font-size: 13px }
+  .none { margin: 12px 0 0; font-weight: 600 }
+  .home { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; min-height: 54px; padding: 8px 26px; background: var(--orange); border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 5px 0 var(--ink); color: #fff; -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; font-size: 22px; font-weight: 700; text-decoration: none }
+  .home svg { width: 1.2em; height: 1.2em }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div><div class="hills"></div></div>
+
+<main class="page">
+  <a class="brand" id="brand" href="./"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="7" width="34" height="26" rx="8" fill="#4fd6a6" stroke="#2f2a4a" stroke-width="3"/><path d="M15 14 L10 20 L15 26 M25 14 L30 20 L25 26" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="b1">Código</span> <span class="b2">Mirim</span></a>
+
+  <div class="lost">
+    <svg class="bot" viewBox="0 0 110 110" aria-hidden="true">
+      <g class="g bot-body">
+        <line x1="50" y1="18" x2="50" y2="32" stroke="#1d2a44" stroke-width="4"/>
+        <circle cx="50" cy="18" r="6" fill="#ff4d4d"/>
+        <rect x="18" y="32" width="64" height="48" rx="14" fill="#4da3ff" stroke="#1d2a44" stroke-width="4"/>
+        <circle cx="38" cy="54" r="9" fill="#fff"/><circle cx="62" cy="54" r="9" fill="#fff"/>
+        <circle cx="36" cy="52" r="4" fill="#1d2a44"/><circle cx="60" cy="52" r="4" fill="#1d2a44"/>
+        <path d="M41 71 q9 -5 18 0" stroke="#1d2a44" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <rect x="30" y="82" width="40" height="20" rx="6" fill="#8cc4ff" stroke="#1d2a44" stroke-width="4"/>
+      </g>
+      <g class="g q"><circle cx="94" cy="20" r="14" fill="#ffd23f" stroke="#1d2a44" stroke-width="4"/><text x="94" y="27" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="20" font-weight="700" fill="#1d2a44">?</text></g>
+    </svg>
+    <h1>Essa página não existe</h1>
+  </div>
+  <p class="typed" id="typed" hidden>Você abriu: <b id="typed-path"></b></p>
+
+  <section class="card" id="best-card" hidden aria-labelledby="best-title">
+    <h2 id="best-title">Você quis dizer:</h2>
+    <div class="best" id="best"></div>
+    <p class="soon" id="soon" hidden></p>
+  </section>
+
+  <section class="card" aria-labelledby="all-title">
+    <h2 id="all-title">Todos os jogos e materiais</h2>
+    <label class="find" for="find">Procure pelo nome:</label>
+    <input id="find" type="search" placeholder="Por exemplo: ninja, gems, certificado" autocomplete="off">
+    <div id="groups"></div>
+    <p class="none" id="none" hidden>Nada com esse nome. Tente outra palavra.</p>
+  </section>
+
+  <a class="home" id="home" href="./"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 L12 4 L21 11 M5.5 9.5 V20 H18.5 V9.5 M10 20 V14 H14 V20" fill="#fff" stroke="#2f2a4a" stroke-width="2.4" stroke-linejoin="round"/></svg>Página inicial</a>
+</main>
+
+<!-- lista dos links curtos, escrita pelo montar_portal.py -->
+<script type="application/json" id="links-curtos">{"site":"https://medeiros08.github.io/Codigo-Mirim/","groups":{"jogos":"Jogos","oficina":"Oficina de Prompts","formador":"Para quem dá a oficina","aula":"Materiais da aula"},"items":[{"id":"escola","name":"A turma toda no celular","group":"jogos","color":"yellow","text":"Os quatro jogos num menu só. Projete o QR code e cada criança escolhe o seu jogo."},{"id":"robo","name":"Robô pega a estrela","group":"jogos","color":"blue","text":"Monte as setas e leve o robô até a estrela."},{"id":"ninja","name":"Ninja dos Bugs","group":"jogos","color":"pink","text":"Deslize o dedo para cortar os bugs, sem cortar o robô."},{"id":"dupla","name":"Programação em Dupla","group":"jogos","color":"mint","text":"Um pilota o robô e o outro, que vê os bugs escondidos, mostra o caminho."},{"id":"conecta","name":"Conecta o Sistema","group":"jogos","color":"orange","text":"Ligue os cabos e faça a foto chegar do banco de dados até o celular."},{"id":"arcade","name":"Arcade do Código","group":"jogos","color":"purple","text":"Três jogos rápidos com o robô Bit e um placar para a turma."},{"id":"caca-bugs","name":"Caça aos Bugs!","group":"jogos","color":"yellow","text":"Toque nos insetos para consertar o app da escola em 30 segundos."},{"id":"oficina","name":"Oficina de Prompts","group":"oficina","color":"pink","text":"A formação em quatro encontros: como pedir ao Gemini atividades, histórias e jogos."},{"id":"curso","name":"Curso online","group":"oficina","color":"blue","text":"A oficina para fazer sozinho, no seu ritmo: 4 módulos com prática, teste final e comprovante."},{"id":"jogo-do-prompt","name":"Jogo do Prompt","group":"oficina","color":"mint","text":"Monte o pedido com as quatro peças e veja o que o Gemini faria. Bom para começar."},{"id":"prompt","name":"Construtor de prompts","group":"oficina","color":"blue","text":"Responda algumas perguntas e receba um prompt pronto para colar no Gemini."},{"id":"biblioteca","name":"Biblioteca de prompts","group":"oficina","color":"yellow","text":"Prompts de partida por etapa e tipo de material. Copie, troque o que está entre colchetes e use."},{"id":"gems","name":"Gems prontos","group":"oficina","color":"purple","text":"Seis assistentes com instruções para copiar e usar o ano todo."},{"id":"guia","name":"Guia do professor","group":"oficina","color":"orange","text":"O método, exemplos, BNCC, inclusão, privacidade e o checklist de revisão."},{"id":"galeria","name":"Galeria de jogos","group":"oficina","color":"mint","text":"Os jogos que os professores criam na oficina, para jogar e para ter ideias."},{"id":"passo-a-passo","name":"Passo a passo animado","group":"oficina","color":"pink","text":"Três vídeos curtos: abrir o Canvas, compartilhar o jogo com a turma e criar um Gem."},{"id":"formador","name":"Roteiro do formador","group":"formador","color":"yellow","text":"Os quatro encontros passo a passo, com tempos, perguntas e o que fazer se der problema."},{"id":"encontros","name":"Slides dos encontros","group":"formador","color":"blue","text":"Um para cada encontro, para o projetor. Passe com as setas e aperte F para tela cheia."},{"id":"caderno","name":"Caderno do participante","group":"formador","color":"mint","text":"Cinco folhas de prática, uma cópia por professor. Cada encontro usa uma parte."},{"id":"avaliacao","name":"Avaliação do encontro","group":"formador","color":"pink","text":"Folha anônima para o fim de cada encontro, ou perguntas para copiar no Google Forms."},{"id":"avaliar","name":"Avaliação pelo celular","group":"formador","color":"purple","text":"O formulário anônimo da oficina, para responder no fim de cada encontro. O QR está no último slide."},{"id":"certificado-oficina","name":"Certificado da oficina","group":"formador","color":"purple","text":"Escreva os nomes dos professores e imprima um por pessoa, ou baixe em branco."},{"id":"convite","name":"Cartaz-convite","group":"formador","color":"mint","text":"Para pendurar na escola, com espaço para data, horário, local e contato."},{"id":"proposta","name":"Proposta para a escola","group":"formador","color":"orange","text":"Uma página para a direção ou a Secretaria de Educação: o que é, formato e o que a escola precisa."},{"id":"slides","name":"Slides da aula","group":"aula","color":"blue","text":"Dez telas para o projetor. Passe com as setas e aperte F para tela cheia."},{"id":"roteiro","name":"Roteiro da aula","group":"aula","color":"yellow","text":"Passo a passo de 50 minutos, por idade, com cartões de seta e respostas."},{"id":"atividades","name":"Folha de atividades","group":"aula","color":"mint","text":"Labirinto, ache o bug, caça-palavras e invente um app. Três folhas por criança."},{"id":"mapas","name":"Mapas do navegador","group":"aula","color":"orange","text":"As 15 fases da Programação em Dupla, para jogar sem celular."},{"id":"certificado","name":"Certificado","group":"aula","color":"pink","text":"Escreva os nomes da turma e imprima um por criança, ou baixe em PDF."}]}</script>
+
+<script>
+// Showing a friendly page when someone types a short link wrong, with the closest links and the full list
+const DATA = JSON.parse(document.getElementById("links-curtos").textContent)
+const SITE_PATH = new URL(DATA.site || "https://medeiros08.github.io/Codigo-Mirim/").pathname
+// GitHub Pages shows this page at any address, so links are written from the root of the site
+const BASE = location.pathname.startsWith(SITE_PATH) ? SITE_PATH : "/"
+const COLORS = { blue: ["#4da3ff", "#cfe6ff"], pink: ["#ff5f8f", "#ffd6e3"], mint: ["#4fd6a6", "#c9f5e3"], orange: ["#ff8a3d", "#ffdcc4"], purple: ["#a08bff", "#e2dbff"], yellow: ["#ffd23f", "#fff1a8"] }
+const $ = id => document.getElementById(id)
+const escape = text => String(text).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
+const plain = text => String(text).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+const slug = text => plain(text).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+
+try { document.fonts.add(new FontFace("Fredoka", `url(${BASE}fontes/fredoka.woff2)`, { weight: "300 700" })) } catch {}
+$("brand").href = $("home").href = BASE
+
+const items = (DATA.items || []).map(item => ({ ...item, href: BASE + item.id + "/", words: [item.id, slug(item.name)] }))
+const shortOf = item => (new URL(DATA.site).host + SITE_PATH + item.id).replace(/\/$/, "")
+
+function distance(a, b) {
+  // Levenshtein: how many letters must change to turn one word into the other
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i)
+  for (let i = 1; i <= a.length; i++) {
+    let last = row[0]
+    row[0] = i
+    for (let j = 1; j <= b.length; j++) {
+      const keep = row[j]
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, last + (a[i - 1] === b[j - 1] ? 0 : 1))
+      last = keep
+    }
+  }
+  return row[b.length]
+}
+
+function score(typed, item) {
+  let best = Infinity
+  for (const word of item.words) {
+    if (!word) continue
+    if (word === typed) return 0
+    if (typed.length >= 3 && (word.startsWith(typed) || typed.startsWith(word))) best = Math.min(best, .5)
+    else if (typed.length >= 4 && word.includes(typed)) best = Math.min(best, .8)
+    best = Math.min(best, distance(typed, word) / Math.max(4, word.length) * 3)
+  }
+  return best
+}
+
+const card = item => {
+  const [c, light] = COLORS[item.color] || COLORS.blue
+  const short = shortOf(item)
+  const cut = short.lastIndexOf("/") + 1
+  return `<a class="go" href="${item.href}" style="--c:${c};--light:${light}"><span class="dot"></span><span><strong>${escape(item.name)}</strong><small>${escape(short.slice(0, cut))}<b>${escape(short.slice(cut))}</b></small></span></a>`
+}
+
+// What was typed after the address of the site, like "ninjá" in /Codigo-Mirim/ninjá/
+const typedPath = decodeURIComponent(location.pathname.slice(BASE.length)).replace(/\/index\.html$/, "").replace(/\/+$/, "")
+const typed = slug(typedPath.split("/")[0] || new URLSearchParams(location.search).get("caminho") || "")
+if (typedPath) {
+  $("typed").hidden = false
+  $("typed-path").textContent = "/" + typedPath
+}
+if (typed) {
+  const ranked = items.map(item => [item, score(typed, item)]).filter(([, s]) => s <= 1.6).sort((a, b) => a[1] - b[1]).slice(0, 3)
+  if (ranked.length) {
+    $("best-card").hidden = false
+    $("best").innerHTML = ranked.map(([item]) => card(item)).join("")
+    // Only a difference of capital letters or accents: go straight to the right page
+    if (ranked[0][1] === 0 && !location.search.includes("teste")) {
+      $("soon").hidden = false
+      $("soon").textContent = `Abrindo ${ranked[0][0].name}…`
+      setTimeout(() => location.replace(ranked[0][0].href + location.hash), 1200)
+    }
+  }
+}
+
+function drawGroups() {
+  const words = plain($("find").value.trim()).split(/\s+/).filter(Boolean)
+  const match = item => words.every(word => plain(item.name + " " + item.id + " " + (item.text || "")).includes(word))
+  let shown = 0
+  $("groups").innerHTML = Object.entries(DATA.groups || {}).map(([group, title]) => {
+    const list = items.filter(item => item.group === group && match(item))
+    shown += list.length
+    if (!list.length) return ""
+    return `<div class="group"><h3>${escape(title)}</h3><ul class="pills">${list.map(item => {
+      const [, light] = COLORS[item.color] || COLORS.blue
+      return `<li><a href="${item.href}" style="--light:${light}">${escape(item.name)}<small>/${escape(item.id)}</small></a></li>`
+    }).join("")}</ul></div>`
+  }).join("")
+  $("none").hidden = shown > 0
+}
+$("find").addEventListener("input", drawGroups)
+drawGroups()
+</script>
+</body>
+</html>

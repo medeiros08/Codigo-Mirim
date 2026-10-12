@@ -14,6 +14,7 @@ body{
   background:linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 72%, var(--sky2) 100%);
   -webkit-user-select:none; user-select:none;
 }
+html{ touch-action:manipulation; }
 button{ font:inherit; border:0; cursor:pointer; touch-action:manipulation; color:inherit; background:none; }
 button:focus-visible, canvas:focus-visible{ outline:4px solid var(--ink); outline-offset:3px; }
 [hidden]{ display:none !important; }
@@ -103,13 +104,16 @@ button:focus-visible, canvas:focus-visible{ outline:4px solid var(--ink); outlin
 .g-body p{ margin:0; font-size:.98rem; font-weight:500; color:var(--soft); line-height:1.3; }
 .g-meta{ display:flex; gap:6px; flex-wrap:wrap; }
 .chip{ font-size:.8rem; font-weight:600; background:var(--paper); padding:4px 10px; border-radius:99px; }
-.g-play{ margin-top:4px; background:var(--c); color:#fff; font-weight:700; font-size:1.3rem; padding:10px; border-radius:18px; box-shadow:0 5px 0 var(--cd); text-shadow:0 2px 0 rgba(0,0,0,.15); }
+.g-play{ margin-top:4px; background:var(--c); color:#fff; font-weight:700; font-size:1.3rem; padding:10px; border-radius:18px; box-shadow:0 5px 0 var(--cd); -webkit-text-stroke:5px var(--ink); paint-order:stroke fill; }
 .gcard.active .g-play{ animation:breathe 1.8s ease-in-out infinite; }
 @keyframes breathe{ 50%{ transform:scale(1.04); } }
 .g-play:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--cd); }
-.dots{ display:flex; justify-content:center; gap:8px; margin-top:-6px; }
-.dot{ width:12px; height:12px; border-radius:99px; background:rgba(255,255,255,.7); box-shadow:0 2px 0 rgba(47,42,74,.15); transition:width .25s, background .25s; }
-.dot.on{ width:30px; background:var(--ink); }
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.dots{ display:flex; justify-content:center; gap:0; margin-top:-12px; }
+.dot{ position:relative; width:24px; height:24px; border-radius:99px; transition:width .25s; }
+.dot::before{ content:""; position:absolute; inset:6px; border-radius:99px; background:rgba(255,255,255,.7); box-shadow:0 2px 0 rgba(47,42,74,.15); transition:background .25s; }
+.dot.on{ width:42px; }
+.dot.on::before{ background:var(--ink); }
 .mute-menu{ align-self:center; background:rgba(255,255,255,.75); border-radius:99px; padding:5px 16px; font-weight:600; font-size:.9rem; }
 
 /* ---------- como jogar ---------- */
