@@ -1,6 +1,6 @@
 // Guardando os jogos e as páginas do site no aparelho, para abrirem mesmo sem internet.
 // O montar_portal.py preenche VERSION e FILES na cópia que vai para o site.
-const VERSION = "d975e780fc36"
+const VERSION = "859c7f4afb86"
 const FILES = [
   "apple-touch-icon.png",
   "arcade/esteira.js",

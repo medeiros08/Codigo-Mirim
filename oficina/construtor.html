@@ -415,8 +415,8 @@ function render() {
     <div class="part format-part"><b class="format"><i>F</i>Formato</b>${list(prompt.format)}</div>
     ${prompt.ask ? `<div class="part ask-part"><b style="--c: #e2dbff"><i>?</i>Antes de começar</b><p>Antes de criar, me faça até 3 perguntas para entender melhor o que eu preciso. Só comece depois das minhas respostas.</p></div>` : ""}`
   $("tip").innerHTML = kind === "jogo"
-    ? "<b>Dica:</b> no Gemini, ative o <b>Canvas</b> no menu de ferramentas da caixa de mensagem antes de enviar. Assim o jogo aparece pronto para testar ao lado da conversa."
-    : "<b>Dica:</b> leia a resposta com atenção antes de usar com a turma. O Gemini pode errar fatos ou usar palavras difíceis para a idade."
+    ? "<b>Dica:</b> no Gemini, ligue o <b>Canvas</b> antes de enviar: toque em <b>+</b>, depois em <b>Mais ferramentas</b> e <b>Canvas</b>. Se ele disser que não consegue, mande primeiro só a ideia do jogo, em uma frase, e o resto na mensagem seguinte."
+    : "<b>Dica:</b> leia a resposta com atenção antes de usar com a turma. O Gemini pode errar fatos, trocar códigos da BNCC e inventar nomes de livros e músicas."
   $("next").innerHTML = details.next.concat(COMMON_NEXT).map(text =>
     `<li><span>${escape(text)}</span><button type="button" data-copy="${escape(text)}">Copiar</button></li>`).join("")
   $("paste-box").hidden = kind !== "adaptar"

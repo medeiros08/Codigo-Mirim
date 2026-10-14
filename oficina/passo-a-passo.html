@@ -177,6 +177,9 @@
   .s-item b { flex: 1; height: .9em; background: #e6e3f2; border-radius: 1em }
   .s-item svg { width: 2.4em; height: 2.4em; flex: none }
   .s-item span { font-size: 1.6em; font-weight: 700 }
+  .s-tools { padding: .3em .45em }
+  .s-sub { position: absolute; left: calc(100% + .5em); bottom: -.25em; width: 14em; padding: .5em; background: #fff; border: .25em solid var(--ink); border-radius: 1.2em; box-shadow: 0 .35em 0 rgba(47, 42, 74, .2); opacity: 0; visibility: hidden; transform: translateX(-.6em); transition: opacity .25s, visibility .25s, transform .25s }
+  .scene[data-more] .s-sub { opacity: 1; visibility: visible; transform: none }
 
   .s-panel { position: absolute; z-index: 2; top: 0; right: 0; bottom: 0; width: 58%; display: flex; flex-direction: column; background: #fff; border-left: .25em solid var(--ink); transform: translateX(102%); transition: transform .7s cubic-bezier(.5, 0, .3, 1) }
   .scene[data-split] .s-panel { transform: none }
@@ -305,8 +308,11 @@
   .care-two div span { font-size: 2.3em; font-weight: 700; line-height: 1.15 }
   .care-two .yes { background: #c9f5e3 } .care-two .no { background: #ffd6e3 }
 
-  .side { position: absolute; z-index: 5; left: 0; top: 0; bottom: 0; width: 19em; display: flex; flex-direction: column; gap: 1.1em; padding: 1.4em 1.2em; background: #f3f1ff; border-right: .25em solid var(--ink); transform: translateX(-104%); transition: transform .45s cubic-bezier(.5, 0, .3, 1) }
-  .scene[data-side] .side { transform: none }
+  .side { position: absolute; z-index: 5; left: .9em; bottom: 5.6em; width: 19em; display: flex; flex-direction: column; gap: .9em; padding: 1em; background: #fff; border: .25em solid var(--ink); border-radius: 1.2em; box-shadow: 0 .35em 0 rgba(47, 42, 74, .2); opacity: 0; visibility: hidden; transform: translateY(.8em) scale(.95); transform-origin: bottom left; transition: opacity .25s, visibility .25s, transform .25s }
+  .scene[data-side] .side { opacity: 1; visibility: visible; transform: none }
+  .s-gear { position: absolute; z-index: 6; left: .9em; bottom: 1.5em; display: grid; place-items: center; width: 3.3em; height: 3.3em; background: #fff; border: .2em solid var(--ink); border-radius: 50%; transition: transform .15s, box-shadow .2s, opacity .3s, visibility .3s }
+  .s-gear svg { width: 2.1em; height: 2.1em }
+  .scene:not([data-gv="home"]) .s-gear { opacity: 0; visibility: hidden }
   .side-scrim { position: absolute; z-index: 4; inset: 0; background: rgba(47, 42, 74, .12); opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s }
   .scene[data-side] .side-scrim { opacity: 1; visibility: visible }
   .side-gems { display: flex; align-items: center; gap: .7em; padding: .6em .8em; background: #fff; border: .2em solid var(--ink); border-radius: 1em; transition: transform .15s, box-shadow .2s }
@@ -452,6 +458,7 @@
 // Drawn icons, used by the screens and the buttons
 const INK = "#2f2a4a"
 const I = {
+  gear: `<svg viewBox="0 0 24 24"><path d="M12 2.5 V5.5 M12 18.5 V21.5 M2.5 12 H5.5 M18.5 12 H21.5 M5.3 5.3 L7.4 7.4 M16.6 16.6 L18.7 18.7 M5.3 18.7 L7.4 16.6 M16.6 7.4 L18.7 5.3" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="12" r="6.2" fill="#ffd23f" stroke="${INK}" stroke-width="2.4"/><circle cx="12" cy="12" r="2.3" fill="#fff" stroke="${INK}" stroke-width="2"/></svg>`,
   menu: `<svg viewBox="0 0 24 24"><path d="M4 6.5 H20 M4 12 H20 M4 17.5 H20" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/></svg>`,
   avatar: `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#ffd23f" stroke="${INK}" stroke-width="2.5"/><circle cx="16" cy="13" r="5" fill="#fff" stroke="${INK}" stroke-width="2.2"/><path d="M7.5 25.5 C9 20 23 20 24.5 25.5" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/></svg>`,
   sliders: `<svg viewBox="0 0 24 24"><path d="M4 8 H20 M4 16 H20" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><circle cx="9" cy="8" r="2.8" fill="#ffd23f" stroke="${INK}" stroke-width="2.2"/><circle cx="15" cy="16" r="2.8" fill="#4da3ff" stroke="${INK}" stroke-width="2.2"/></svg>`,
@@ -525,9 +532,9 @@ const SCENES = {
       <div class="s-think"><i></i><i></i><i></i></div>
     </div>
     <div class="s-comp">
-      <div class="s-tmenu"><div class="s-item"><i></i><b></b></div><div class="s-item canvas">${I.canvas}<span>Canvas</span></div><div class="s-item"><i></i><b class="w6"></b></div></div>
+      <div class="s-tmenu"><div class="s-item"><i></i><b></b></div><div class="s-item"><i></i><b class="w6"></b></div><div class="s-item s-more">${I.sliders}<span>Mais ferramentas</span></div><div class="s-sub"><div class="s-item"><i></i><b class="w6"></b></div><div class="s-item canvas">${I.canvas}<span>Canvas</span></div></div></div>
       <div class="s-field"><span class="typed" data-key="p1">${typedPrompt}</span><span class="typed" data-key="fix">${typedFix}</span><span class="s-ph">Escreva o seu pedido</span></div>
-      <div class="s-row"><span class="s-pill s-tools">${I.sliders}<span>Ferramentas</span></span><span class="s-pill s-chip">${I.canvas}<span>Canvas</span></span><span class="s-send">${I.up}</span></div>
+      <div class="s-row"><span class="s-pill s-tools" aria-label="Mais">${I.plus}</span><span class="s-pill s-chip">${I.canvas}<span>Canvas</span></span><span class="s-send">${I.up}</span></div>
     </div>
   </div>
   <div class="s-panel">
@@ -552,7 +559,7 @@ ${HANDS}`,
 
   gem: `${TOP}
 <div class="s-body">
-  <div class="gv gv-home"><p class="s-hello">Olá, professor(a)!</p><div class="s-comp"><div class="s-field"><span class="s-ph">Escreva o seu pedido</span></div><div class="s-row"><span class="s-pill s-tools">${I.sliders}<span>Ferramentas</span></span><span class="s-send">${I.up}</span></div></div></div>
+  <div class="gv gv-home"><p class="s-hello">Olá, professor(a)!</p><div class="s-comp"><div class="s-field"><span class="s-ph">Escreva o seu pedido</span></div><div class="s-row"><span class="s-pill s-tools" aria-label="Mais">${I.plus}</span><span class="s-send">${I.up}</span></div></div></div>
   <div class="gv gv-list"><div class="gl-top"><b class="gl-h">Gems</b><span class="s-pill gl-new">${I.plus}<span>Novo Gem</span></span></div><div class="gl-cards">${`<div class="gl-card">${I.gem}<span class="sk"></span><span class="sk w6"></span></div>`.repeat(3)}</div></div>
   <div class="gv gv-edit">
     <div class="ge-form"><b class="ge-h">Novo Gem</b>
@@ -566,7 +573,8 @@ ${HANDS}`,
     </div>
   </div>
   <div class="side-scrim"></div>
-  <div class="side"><div class="side-gems">${I.gem}<span>Gems</span></div><span class="sk"></span><span class="sk w8"></span><span class="sk w6"></span><span class="sk w7"></span></div>
+  <div class="side"><span class="sk w8"></span><span class="sk w6"></span><div class="side-gems">${I.gem}<span>Gems</span></div><span class="sk w7"></span></div>
+  <span class="s-gear" aria-label="Configurações">${I.gear}</span>
 </div>
 <div class="s-care"><div class="care-two"><b>Nas instruções do Gem</b><div class="yes">${I.check}<span>A etapa e o jeito da turma</span></div><div class="no">${I.cross}<span>Nunca dados das crianças</span></div></div></div>
 ${HANDS}`,
@@ -579,8 +587,9 @@ const VIDEOS = {
     n: 1, title: "Abrir o Canvas e pedir um jogo", color: "#4fd6a6", light: "#c9f5e3", scene: "app",
     init: { view: "app", game: "q" }, start: [82, 58],
     steps: [
-      { say: "Na caixa de mensagem, abra as <b>Ferramentas</b>.", dur: 3.6, acts: [["move", .4, ".s-tools"], ["tap", 1.5, ".s-tools"], ["set", 1.65, { tools: true }]] },
-      { say: "Escolha <b>Canvas</b>.", dur: 3.2, acts: [["move", .3, ".s-item.canvas"], ["tap", 1.4, ".s-item.canvas"], ["set", 1.6, { tools: false, canvas: true }], ["move", 1.9, ".s-chip", .6]] },
+      { say: "Na caixa de mensagem, toque em <b>+</b>.", dur: 3.2, acts: [["move", .4, ".s-tools"], ["tap", 1.4, ".s-tools"], ["set", 1.55, { tools: true }]] },
+      { say: "Toque em <b>Mais ferramentas</b>.", dur: 3, acts: [["move", .3, ".s-item.s-more"], ["tap", 1.3, ".s-item.s-more"], ["set", 1.45, { more: true }]] },
+      { say: "Escolha <b>Canvas</b>.", dur: 3.2, acts: [["move", .3, ".s-item.canvas"], ["tap", 1.4, ".s-item.canvas"], ["set", 1.6, { tools: false, more: false, canvas: true }], ["move", 1.9, ".s-chip", .6]] },
       { say: "Escreva o pedido com as quatro partes.", extra: "ptcf", dur: 6.4, acts: [["move", .2, [".s-field", .15, .5]], ["tap", .9, ".s-comp"], ["move", 1.2, [91, 42], .6], ["type", 1.3, 5.9, "p1"]] },
       { say: "Toque na setinha para enviar.", dur: 3.4, acts: [["move", .2, ".s-send"], ["tap", 1.2, ".s-send"], ["clear", 1.35, "p1"], ["set", 1.35, { sent1: true, think: true }]] },
       { say: "O jogo aparece pronto, ao lado da conversa.", dur: 4.2, acts: [["set", .5, { think: false, reply1: true, split: true }], ["move", 1.4, [75, 28], .9]] },
@@ -606,7 +615,7 @@ const VIDEOS = {
     n: 3, title: "Criar um Gem", color: "#8c73ff", light: "#e2dbff", scene: "gem",
     init: { gv: "home" }, start: [55, 55],
     steps: [
-      { say: "Abra o menu lateral.", dur: 3.2, acts: [["move", .3, ".s-menu"], ["tap", 1.3, ".s-menu"], ["set", 1.45, { side: true }]] },
+      { say: "Toque na engrenagem <b>Configurações</b>, embaixo à esquerda.", dur: 3.6, acts: [["move", .3, ".s-gear"], ["tap", 1.3, ".s-gear"], ["set", 1.45, { side: true }]] },
       { say: "Toque em <b>Gems</b>.", dur: 3, key: 1.3, acts: [["move", .2, ".side-gems"], ["tap", 1.2, ".side-gems"], ["set", 1.4, { gv: "list", side: false }]] },
       { say: "Toque em <b>Novo Gem</b>.", dur: 3, key: 1.3, acts: [["move", .2, ".gl-new"], ["tap", 1.2, ".gl-new"], ["set", 1.4, { gv: "edit" }]] },
       { say: "Dê um nome, como Assistente do 2º ano.", dur: 3.8, acts: [["move", .2, [".ge-name", .85, .6]], ["tap", .9, ".ge-name"], ["type", 1.1, 3.2, "name"]] },

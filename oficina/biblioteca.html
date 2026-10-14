@@ -205,6 +205,7 @@
   <ul class="care">
     <li><span class="badge" style="--c: var(--yellow)"><svg viewBox="0 0 24 24"><path d="M4 20 L5 15.5 L15.5 5 A2.1 2.1 0 0 1 18.5 5 L19 5.5 A2.1 2.1 0 0 1 19 8.5 L8.5 19 Z M13.5 7 L17 10.5" fill="none" stroke="#2f2a4a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>Prompts de partida:</b> troque o que está entre colchetes, ajuste para a sua turma e sempre revise a resposta do Gemini. As partes para trocar aparecem assim: <mark>[tema]</mark>.</span></li>
     <li><span class="badge" style="--c: var(--pink)"><svg viewBox="0 0 36 36"><rect x="7" y="16" width="22" height="17" rx="4" fill="#fff" stroke="#2f2a4a" stroke-width="3"/><path d="M11.5 16 V11 A6.5 6.5 0 0 1 24.5 11 V16" fill="none" stroke="#2f2a4a" stroke-width="3"/><circle cx="18" cy="24" r="2.6" fill="#2f2a4a"/></svg></span><span>Nunca escreva o nome ou dados das crianças no Gemini. Fale da turma de um jeito geral.</span></li>
+    <li><span class="badge" style="--c: var(--blue)"><svg viewBox="0 0 24 24"><path d="M19.5 12 A7.5 7.5 0 1 1 16.8 6.2" fill="none" stroke="#2f2a4a" stroke-width="2.6" stroke-linecap="round"/><path d="M17.5 2.5 V6.8 H13.2" fill="none" stroke="#2f2a4a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Se o Gemini disser que não consegue ajudar, toque em <b>Refazer</b>, embaixo da resposta, ou abra uma conversa nova. Às vezes ele recusa um pedido normal.</span></li>
   </ul>
   <p class="own">Quer montar o seu?<a class="btn build" href="construtor.html"><svg viewBox="0 0 24 24"><path d="M7 4.5 L19.5 12 L7 19.5 Z" fill="#fff" stroke="#2f2a4a" stroke-width="2.5" stroke-linejoin="round"/></svg>Use o Construtor de prompts</a></p>
 </section>
@@ -335,7 +336,7 @@ const PROMPTS = [
       "Como perceber se as crianças aprenderam.",
       "Uma adaptação para quem tiver dificuldade e um desafio extra para quem terminar antes.",
     ],
-    tip: "Confira as habilidades da BNCC no documento oficial antes de colocar no seu planejamento.",
+    tip: "Confira cada código da BNCC no documento oficial: nos testes, o Gemini às vezes trocou o código ou o texto da habilidade.",
   },
   {
     title: "Que som é esse? Quiz de apontar",
@@ -352,8 +353,10 @@ const PROMPTS = [
     ],
     format: [
       "8 perguntas para o professor fazer em voz alta, com [3] respostas que as crianças mostram apontando para desenhos.",
+      "Cada pergunta com um som diferente, sem repetir.",
       "Sugira o desenho de cada resposta.",
       "No fim, a resposta certa de cada pergunta e uma explicação simples.",
+      "Escreva tudo aqui na conversa, como texto normal, sem caixa de código.",
     ],
     tip: "Depois, peça: \"Transforme esse quiz em um jogo no Canvas, com estrelas no final.\"",
   },
@@ -398,7 +401,7 @@ const PROMPTS = [
       "O nome da gincana e o objetivo, em uma frase.",
       "Como organizar o espaço e os materiais, passo a passo.",
       "As regras em frases curtas, do jeito que o professor vai falar para as crianças.",
-      "3 rodadas, da mais calma para a mais agitada, e um momento final para voltar à calma.",
+      "3 rodadas, da mais calma para a mais agitada, com o tempo de cada uma, e um momento final para voltar à calma.",
       "Cuidados de segurança e uma versão para dia de chuva, dentro da sala.",
     ],
     tip: "Leia as regras em voz alta como se fosse explicar para a turma. Se ficou comprido, peça para encurtar.",
@@ -446,6 +449,7 @@ const PROMPTS = [
       "Uma folha A4 com título, espaço para o nome e uma instrução curta para a criança.",
       "De 3 a 5 exercícios variados (ligar, completar, circular, desenhar, marcar X), do mais fácil para o mais difícil.",
       "Um problema final sobre dividir algo de forma justa entre amigos.",
+      "Onde houver figura, descreva a imagem entre parênteses, para eu buscar ou desenhar, sem desenhar com letras e símbolos.",
       "No fim, separado, o gabarito e uma dica para o professor.",
     ],
   },
@@ -513,7 +517,7 @@ const PROMPTS = [
       "Como perceber se as crianças aprenderam.",
       "Uma adaptação para quem tiver dificuldade e um desafio extra para quem terminar antes.",
     ],
-    tip: "Confira as habilidades da BNCC no documento oficial antes de colocar no seu planejamento.",
+    tip: "Confira cada código da BNCC no documento oficial: nos testes, o Gemini às vezes trocou o código ou o texto da habilidade.",
   },
   {
     title: "Quiz de leitura: A cigarra e a formiga",
@@ -533,6 +537,7 @@ const PROMPTS = [
       "8 perguntas de múltipla escolha, com 3 alternativas cada, da mais fácil para a mais difícil.",
       "Linguagem simples e alternativas do mesmo tamanho, para a resposta certa não ficar óbvia.",
       "No fim, o gabarito com uma explicação curta de cada resposta.",
+      "Escreva tudo aqui na conversa, como texto normal, sem caixa de código.",
     ],
   },
   {
@@ -573,7 +578,7 @@ const PROMPTS = [
     format: [
       "Uma folha A4 com título, espaço para o nome e uma instrução curta, que o professor também lê em voz alta.",
       "4 exercícios: contar as sílabas batendo palmas, completar a sílaba que falta, ligar a figura à palavra e juntar sílabas para formar uma palavra nova.",
-      "Só palavras que as crianças conhecem, como [BOLA, BOLO, BANANA e BEBÊ].",
+      "Só palavras do dia a dia das crianças, como [BOLA, BOLO, BANANA, BEBÊ, BOCA, BOTA, BOI e BALA], e nenhuma palavra que possa virar apelido.",
       "Onde houver figura, descreva a imagem entre parênteses, para eu buscar ou desenhar.",
       "No fim, separado, o gabarito e uma ideia de jogo rápido com as sílabas para fazer na sala.",
     ],
@@ -660,7 +665,7 @@ const PROMPTS = [
     format: [
       "Um título e de 8 a 12 parágrafos curtos, para ler em voz alta em cerca de 10 minutos.",
       "Personagens com nomes brasileiros e pistas espalhadas pelo texto, para a turma tentar resolver o mistério antes do fim.",
-      "A palavra PAUSA marcando o ponto antes do desfecho, para a turma dar palpites.",
+      "A palavra PAUSA antes do desfecho, para a turma dar palpites: até a PAUSA, só pistas; quem apagou o quadro só aparece depois dela.",
       "No fim, uma tabela com os elementos da narrativa desse conto e 3 perguntas para conversar com a turma.",
     ],
   },
@@ -685,7 +690,7 @@ const PROMPTS = [
       "Como perceber se os estudantes aprenderam.",
       "Uma adaptação para quem tiver dificuldade e um desafio extra para quem terminar antes.",
     ],
-    tip: "Confira as habilidades da BNCC no documento oficial antes de colocar no seu planejamento.",
+    tip: "Confira cada código da BNCC no documento oficial: nos testes, o Gemini às vezes trocou o código ou o texto da habilidade.",
   },
   {
     title: "Quiz do Sistema Solar para revisão",
@@ -703,10 +708,10 @@ const PROMPTS = [
     format: [
       "[10] perguntas de múltipla escolha, com 4 alternativas cada (a, b, c, d), da mais fácil para a mais difícil.",
       "Alternativas do mesmo tamanho, para a resposta certa não ficar óbvia.",
-      "Cada pergunta em um bloco separado, fácil de copiar para o Google Formulários.",
+      "Cada pergunta em um bloco separado, fácil de copiar para o Google Formulários. Escreva tudo aqui na conversa, como texto, sem usar o teste interativo.",
       "No fim, o gabarito com uma explicação curta de cada resposta, para mostrar aos estudantes depois.",
     ],
-    tip: "Confira cada resposta do gabarito antes de aplicar: dados de astronomia são fáceis de errar.",
+    tip: "Se o Gemini abrir o teste interativo, toque em Tentar novamente sem a ferramenta, embaixo da resposta. Confira o gabarito: dados de astronomia são fáceis de errar.",
   },
   {
     title: "Prova adaptada para baixa visão",
@@ -723,7 +728,8 @@ const PROMPTS = [
     format: [
       "Mantenha o conteúdo e os objetivos da prova original.",
       "Frases curtas, uma pergunta por vez e alternativas em lista, fáceis de ouvir no leitor de tela.",
-      "Para cada mapa ou imagem, uma descrição clara em texto.",
+      "Para cada mapa ou imagem, uma descrição clara em texto, sem entregar a resposta. Se a pergunta só faz sentido olhando a imagem, troque por outra que avalie a mesma coisa.",
+      "Não mude as respostas certas da prova. Se achar algum erro, avise no fim, sem corrigir.",
       "Uma sugestão de tamanho de letra e de espaçamento para a versão ampliada.",
       "No fim, liste o que você mudou e por quê.",
       "MATERIAL ORIGINAL:\n[cole aqui a prova, sem nomes de estudantes]",
@@ -810,8 +816,8 @@ const KIND_ICONS = {
 
 // Giving every card a tip when its prompt has none of its own
 const TIPS = {
-  jogo: "No Gemini, ative o Canvas no menu de ferramentas antes de enviar: o jogo aparece pronto para testar ao lado da conversa.",
-  other: "Revise a resposta antes de usar com a turma: o Gemini pode errar fatos ou usar palavras difíceis para a idade.",
+  jogo: "Ligue o Canvas antes de enviar: toque em + e depois em Mais ferramentas, Canvas. Se o Gemini disser que não consegue, mande primeiro só a ideia do jogo, em uma frase, e o resto na mensagem seguinte.",
+  other: "Revise antes de usar com a turma: o Gemini pode errar fatos, trocar códigos da BNCC e inventar nomes de livros e músicas.",
 }
 
 const ASK = "Antes de criar, me faça até 3 perguntas para entender melhor o que eu preciso. Só comece depois das minhas respostas."
